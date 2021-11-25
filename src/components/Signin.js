@@ -1,25 +1,19 @@
-import * as React from 'react';
+import React from "react";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import PinterestIcon from '@mui/icons-material/Pinterest';
 import { makeStyles } from '@mui/styles';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import bground from './images/bground.png'
-import pinlogo from './images/pinlogo.png'
-import { alpha } from '@mui/system';
 import Divider from '@mui/material/Divider';
-import { Link , Redirect} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { withStyles } from "@mui/styles";
+
 
 // const useStyles = makeStyles(theme => ({
 //     textField:{
@@ -34,7 +28,7 @@ const Item = styled(Paper)(({ theme }) => ({
     borderRadius: 30
 }));
 
-const useStyles = makeStyles({
+const styles = theme => ({
     textFielStyle: {
         "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
             borderRadius: 30
@@ -68,23 +62,53 @@ const useStyles = makeStyles({
 const theme = createTheme();
 
 
-export default function SignIn() {
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        // eslint-disable-next-line no-console
-        if (data.get('email') == "antonsamirabdu@gmail.com" & data.get('password') == "admin"){
-            window.location.href = '/home';
-        } else {
-            alert ('username or password is incorrect')
+// export default function SignUp() {
+//     const handleSubmit = (event) => {
+//         event.preventDefault();
+//         const data = new FormData(event.currentTarget);
+//         // eslint-disable-next-line no-console
+//         console.log({
+//             email: data.get('email'),
+//             password: data.get('password'),
+//         });
+//     };
+class SignIn extends React.Component {
+    constructor(){
+        super();
+        this.state={
+            email: "",
+            password: ""
         }
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-    };
-    const classes = useStyles();
-    return (
+    }
+    setemail=(e)=>{
+        this.setState({email:e.target.value})
+    }
+    setpass=(e)=>{
+        this.setState({password:e.target.value})
+    }
+    submit=(e)=>{
+        e.preventDefault();
+        fetch("https://reqres.in/api/login",{
+            method: "POST",
+                headers: {
+                    'content-type': "application/json"
+                },
+                body: JSON.stringify(this.state)
+        }).then(res=>res.json())
+        .then(obj=>{  
+            if (obj.token) {
+                alert("login success")
+                
+            } else {
+                alert(obj.error)
+            }
+            
+        })
+        
+    }
+render(){
+    const { classes } = this.props;
+    return <div>
 
                         <Box
                                 sx={{
@@ -106,7 +130,7 @@ export default function SignIn() {
                                 <Typography variant="body1" sx={{ fontSize: 18 ,color:'gray' }}>
                                     Find new ideas to try
                                 </Typography>
-                                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, padding: 5 }} >
+                                <Box component="form"  noValidate sx={{ mt: 1, padding: 5 }} >
                                     <TextField
                                         margin="normal"
                                         required
@@ -118,6 +142,7 @@ export default function SignIn() {
                                         autoComplete="email"
                                         autoFocus
                                         className={classes.textFielStyle}
+                                        onChange={this.setemail}
 
 
                                     />
@@ -131,6 +156,7 @@ export default function SignIn() {
                                         id="password"
                                         autoComplete="current-password"
                                         className={classes.textFielStyle}
+                                        onChange={this.setpass}
 
                                     />
                                    
@@ -150,6 +176,7 @@ export default function SignIn() {
                                         fullWidth
                                         variant="contained"
                                         sx={{ mt: 3, mb: 2, borderRadius: 30, bgcolor: "red", ":hover": { bgcolor: "darkred" } }}
+                                        onClick={this.submit}
                                     >
                                         Log In
                                     </Button>
@@ -180,9 +207,10 @@ export default function SignIn() {
                             </Box>
 
 
-);
+                            </div>
 }
 
 
 
-
+}
+export default withStyles(styles)(SignIn);

@@ -53,7 +53,7 @@ function Header(props) {
                     <TextsmsIcon />
                 </IconButton>
                 <IconButton>
-                    <FaceIcon onClick={()=> <Redirect to='/signin'/>}/>
+                    <FaceIcon />
                 </IconButton>
                 <IconButton>
                     <DropMenu />
@@ -91,12 +91,21 @@ const HomeButtons = styled.div`
   cursor: pointer;
 `;
 const HomePageButton = styled(HomeButtons)`
-  background-color:rgb(17,17,17);
-  a{
-      text-decoration:none;
-      color:white;
-      font-weight:700;
-  }
+//   background-color:rgb(17,17,17);
+//   a{
+//       text-decoration:none;
+//       color:white;
+//       font-weight:700;
+//   }
+background-color: white;
+a {
+  text-decoration: none;
+  color: black;
+  font-weight: 700;
+}
+:hover {
+  background-color: #e1e1e1;
+}
 `
 const FollowingButton = styled(HomeButtons)`
   background-color: white;
