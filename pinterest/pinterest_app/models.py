@@ -1,25 +1,29 @@
 from django.db import models
-
+from django.contrib.auth.models import AbstractUser
 class Board(models.Model):
     description = models.TextField(null= True, blank= True)
     title = models.CharField(null= True, blank= True, max_length= 100 )
     privacy = models.BooleanField(default= False)
     user = models.ForeignKey('User', on_delete=models.CASCADE)
 
-class User(models.Model):
-    first_name = models.CharField(max_length= 50 )
-    last_name = models.CharField(max_length=50)
-    mail = models.EmailField(max_length=50)
-    password = models.CharField(max_length=50)
-    phone = models.IntegerField()
-    avatar = models.ImageField(upload_to= '', null= True, blank= True)
+class User(AbstractUser):
+    username = None
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    email = models.EmailField(max_length=150, unique=True)
+    password = models.CharField(max_length=150)
+    phone = models.CharField(max_length=15)
+    avatar = models.ImageField(upload_to= 'pinterest_app/user_avatar', null= True, blank= True)
+    age = models.IntegerField()
+    gender = models.CharField(max_length= 10, choices= [('female', 'female'), ('male', 'male')])
     followers = models.ManyToManyField(
         to='self',
         related_name='followees',
         symmetrical=False
     )
     friends = models.ManyToManyField('User', blank= True)
-
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
 
 class Pin(models.Model):
@@ -27,10 +31,21 @@ class Pin(models.Model):
     alt_txt = models.CharField(max_length= 500, null= True, blank= True )
     description = models.TextField(null=True, blank=True)
     destination_link = models.URLField(null=True, blank=True)
-    type = models.CharField(max_length= 10, choices= [('image', 'video')], default= 'image' )
-    url = models.ImageField(upload_to= '')
+    type = models.CharField(max_length=10, choices= [('image', 'image'), ('video', 'video')], default= 'image')
+    url = models.ImageField(upload_to= 'pinterest_app/Pin', max_length=200)
     boards = models.ManyToManyField(Board, blank=True)
     user = models.ForeignKey('User', on_delete=models.CASCADE)
+    likes = models.IntegerField(blank=True, null=True)
+
+class Saved_pins(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    pin = models.ForeignKey('Pin', on_delete=models.CASCADE)
+
+class Comment_pins(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    pin = models.ForeignKey('Pin', on_delete=models.CASCADE)
+    comment = models.TextField()
+
 
 class freind_request(models.Model):
     from_user = models.ForeignKey('User', related_name= 'from_user', on_delete= models.CASCADE)
@@ -52,5 +67,6 @@ class Notification(models.Model):
     notification_date = models.DateTimeField(auto_now_add=True)
 
 class pin_tags(models.Model):
-    pin = models.ForeignKey(Pin, on_delete=models.CASCADE)
+    pin = models.ManyToManyField(Pin, blank=True)
     tag = models.CharField(max_length= 100 )
+    user = models.ManyToManyField(User, blank=True)

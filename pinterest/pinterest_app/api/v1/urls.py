@@ -3,6 +3,10 @@ from pinterest_app.api.v1 import views
 
 app_name = 'pinterest'
 urlpatterns = [
-    path('<str:obj>', views.Crud_ops.obj_list, name='obj_list'),
-    path('<str:obj>/<int:id>', views.Crud_ops.obj_deatails, name='obj_deatails'),
+    path('home/', views.home, name='home'),
+    path('crud/<str:obj>', views.Crud_ops.obj_list, name='obj_list'),
+    path('crud/<str:obj>/<int:id>', views.Crud_ops.obj_deatails, name='obj_deatails'),
+    path('crud/create/<str:obj>', views.Crud_ops.obj_create, name='obj_create'),
+    path('crud/delete/<str:obj>/<int:id>', views.Crud_ops.obj_delete, name='obj_delete'),
+    path('crud/update/<str:obj>/<int:id>', views.Crud_ops.obj_update, name='obj_update'),
 ]

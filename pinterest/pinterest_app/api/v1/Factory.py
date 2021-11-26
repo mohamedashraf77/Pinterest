@@ -7,19 +7,13 @@ class PinterestFactory:
 
     def get_model(self, model):
         if model == 'board':
-            ser.PinteresrSerializer.Meta.model = Board
             return Board.objects
-        elif model == 'user':
-            return User.objects
         elif model == 'pin':
             return Pin.objects
 
     def get_serialzer(self, model, **kwargs):
-        print(kwargs)
         if model == 'board':
             ser.PinteresrSerializer.Meta.model = Board
-        elif model == 'user':
-            ser.PinteresrSerializer.Meta.model = User
         elif model == 'pin':
             ser.PinteresrSerializer.Meta.model = Pin
 

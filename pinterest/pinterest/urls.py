@@ -19,6 +19,6 @@ import pinterest_app
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('pinterest_app/api/v1/', include('pinterest_app.api.v1.urls'))
-,
+    path('pinterest_app/api/v1/', include('pinterest_app.api.v1.urls')),
+    path('account/api/v1/', include('account.api.v1.urls')),
 ]
