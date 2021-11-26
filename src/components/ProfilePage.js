@@ -3,24 +3,29 @@ import profile from './images/profile.jpg'
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Header from "./Header";
-import { Box, Container, Typography, Grid, Button, Divider, List, ListItem, } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import { Box, Container, Typography, Grid, Button, Divider, List, ListItem,Icon } from "@mui/material";
+// import { styled } from '@mui/material/styles';
 
 import Paper from '@mui/material/Paper';
-
+import styled from 'styled-components'
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { bgcolor } from "@mui/system";
+import AddIcon from '@mui/icons-material/Add';
+import IconButton from "@mui/material/IconButton";
+import Popup from "./Popup";
 
 
-const Item = styled(Paper)(({ theme }) => ({
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
 
 
+
+function srcset(image: string, size: number, rows = 1, cols = 1) {
+    return {
+        src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
+        srcSet: `${image}?w=${size * cols}&h=${size * rows
+            }&fit=crop&auto=format&dpr=2 2x`
+    };
+}
 
 class Profile extends React.Component {
     constructor() {
@@ -32,51 +37,84 @@ class Profile extends React.Component {
             following: 23,
             board: [{
                 name: "Acceleration",
-                images: [
-                    "https://image.shutterstock.com/z/stock-photo-business-accelerator-program-providing-a-launch-pad-for-companies-d-illustration-render-539542939.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-shaving-effect-657743737.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-199485986.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-hand-turning-a-button-with-a-rocket-icon-to-the-maximum-acceleration-concept-of-career-585388175.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-spacecraft-takes-off-into-space-rocket-flies-to-mars-red-planet-mars-in-space-1047890749.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-cloudy-launch-of-rocket-into-starry-outer-space-the-elements-of-this-image-furnished-by-nasa-1384231883.jpg"
-                ],
-                color: "red"
+                images: [{
+                    img: "https://image.shutterstock.com/z/stock-photo-business-accelerator-program-providing-a-launch-pad-for-companies-d-illustration-render-539542939.jpg",
+                    cols: 2,
+                    rows: 2
+                },
+                {
+                    img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-shaving-effect-657743737.jpg",
+                },
+                {
+                    img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-199485986.jpg",
+                }],
+                pin:5,
+                time:"2w"
+
+            },
+            
+            {
+                name: "Breackfast",
+                images: [{
+                    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
+                    cols: 2,
+                    rows: 2
+                },
+                {
+                    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
+                },
+                {
+                    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
+                }],
+                pin:5,
+                time:"2w"
 
             },
             {
-                name: "Advertising",
-                images: [
-                    "https://image.shutterstock.com/z/stock-photo-london-uk-july-people-and-new-famous-advertisements-in-piccadilly-circus-in-london-a-301225568.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-advertise-advertising-advertisement-branding-concept-281221427.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-scratched-advertising-89726605.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-hong-kong-october-mongkok-at-night-on-october-in-hong-kong-china-mongkok-in-229855126.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-outdoor-advertising-bus-shelter-323731910.jpg"
-                ],
-                color: "yellow"
+                name: "Acceleration",
+                images: [{
+                    img: "https://image.shutterstock.com/z/stock-photo-business-accelerator-program-providing-a-launch-pad-for-companies-d-illustration-render-539542939.jpg",
+                    cols: 2,
+                    rows: 2
+                },
+                {
+                    img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-shaving-effect-657743737.jpg",
+                },
+                {
+                    img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-199485986.jpg",
+                }],
+                pin:3,
+                time:"2w"
+
             },
             {
-                name: "AgroTech",
-                images: [
-                    "https://image.shutterstock.com/z/stock-photo-happy-farmer-using-digital-tablet-computer-in-cultivated-coffee-field-plantation-modern-technology-616760432.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-agricultural-field-in-a-clear-sunny-day-high-technologies-and-innovations-in-agro-industry-study-1188330049.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-agro-engineering-selective-focus-of-a-small-plant-being-used-for-agro-engineering-research-772453432.jpg"
-                ],
-                color: "gray"
+                name: "Breackfast",
+                images: [{
+                    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
+                    cols: 2,
+                    rows: 2
+                },
+                {
+                    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
+                },
+                {
+                    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
+                }],
+                pin:2,
+                time:"2w"
+
             },
-            {
-                name: "Ask me anything",
-                images: [
-                    "https://image.shutterstock.com/z/stock-photo-question-mark-heap-on-table-concept-for-confusion-question-or-solution-264466154.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-he-got-some-questions-group-of-young-people-sitting-on-conference-together-while-one-man-raising-439207960.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-isolated-portrait-of-stylish-young-mixed-race-woman-with-dark-shaggy-hair-touching-her-chin-and-640007002.jpg",
-                    "https://image.shutterstock.com/z/stock-photo-african-american-business-people-raising-there-hand-up-at-a-conference-to-answer-a-question-662965375.jpg"
-                ],
-                color: "black"
-            },
+            
 
             ]
 
         }
+    }
+
+    dataToShow =()=>{
+        return <div>
+            hii
+        </div>
     }
 
     render() {
@@ -120,6 +158,12 @@ class Profile extends React.Component {
                 </Box>
             </Container>
             <Divider variant="middle" sx={{ margin: 3 }} />
+            <Container>
+                <Popup dataToShow={this.dataToShow}/>
+           
+            
+            </Container>
+           
 
             <Container>
 
@@ -128,49 +172,57 @@ class Profile extends React.Component {
                         <Grid item xs={3} >
 
                             <a href="#">
-                                <Box sx={{ borderRadius: 5, bgcolor: "lightgray", padding: 1,margin:1 }}>
+                                <Box sx={{ borderRadius: 5, padding: 1,}}>
 
-                                    <ImageList variant="masonry" cols={3} gap={8} sx={{ borderRadius: 4 }}>
-                                        {cat.images.filter((image, idx) => idx < 3).map(image => (
+                                    {/* <ImageList variant="masonry" cols={3} gap={8} sx={{ borderRadius: 4 }}>
+                                        {cat.images.filter((image, idx) => idx < 4).map(image => (
 
                                             <ImageListItem  >
                                                 <img
                                                     src={image}
-
                                                     loading="lazy"
-
                                                 />
                                             </ImageListItem>
 
                                         ))}
+                                    </ImageList> */}
+                                    <ImageList
+                                        sx={{ width: 1, height: 1 }}
+                                        variant="quilted"
+                                        cols={3}
+                                        rowHeight={121}
+                                        sx={{ borderRadius: 4 }}
+                                    >
+                                        {cat.images.filter((image, idx) => idx < 4).map(image => (
+                                            <ImageListItem
+                                                // key={cat.image.img}
+                                                cols={image.cols || 1}
+                                                rows={image.rows || 1}
+                                            >
+                                                <img
+                                                    {...srcset(image.img, 121, image.cols, image.cols)}
+                                                    alt={cat.name}
+                                                    loading="lazy"
+                                                />
+                                            </ImageListItem>
+                                        ))}
                                     </ImageList>
                                 </Box>
-                                <Typography component="h1" variant="h5" sx={{ fontSize: 10, color: "black", fontWeight: "bold" }}>
+
+                                <Typography component="h2" variant="h6" sx={{  color: "black", fontWeight: "bold" ,marginLeft:5,top:0}}>
                                     {cat.name}
                                 </Typography>
+                                <Typography  variant="subtitle2" sx={{  color: "black",marginLeft:5,top:0}}>
+                                    {cat.pin} Pins {cat.time}
+                                </Typography>
                             </a>
-
                         </Grid>
-
-
                     ))}
-
-
                 </Grid>
-
-
-
             </Container>
-
-
-
-
-
-
-
-
         </div>
     }
 }
 
 export default Profile
+

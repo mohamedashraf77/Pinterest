@@ -15,6 +15,8 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import SignupPopup from './components/signupComponants/SignupPopup'
 import CategriesSelection from './components/signupComponants/CategriesSelection'
 import Profile from "./components/ProfilePage";
+import Popup from "./components/Popup";
+import Details from "./components/Details"
 
 
 
@@ -82,6 +84,15 @@ function App() {
     <Router>
       <div className="app">
         <Switch>
+        <Route path='/show/:id' render={(props) =>
+        <>
+        <Header onSumbit={onSearchSubmit} />
+        <Details {...props}/>
+        <Mainboard pins={pins} />
+      </>
+        }>
+        {/* <Details  /> */}
+      </Route>
           <Route path='/add'>
             <Header onSumbit={onSearchSubmit} />
             <AddPin />
@@ -96,6 +107,7 @@ function App() {
           </Route>
           <Route path='/profile'>
             <Profile />
+            <Popup />
           </Route>
           <Redirect path='/' to='/signin' />
           {/* <AddPin />  */}

@@ -6,18 +6,18 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
 
-function Pin(props) {
-    let { urls } = props
+function Pin({urls},{key}) {
+    // let { urls } = props
+    
     return (
         <Wrapper>
             <Container>
-
                 <div className="card">
                     {/* <div className="pin_title">{props.pinDetails.title}</div> */}
                     <div className="pin_modal">
-                        <div className="modal_head">
-                            <Button variant="contained" className="save_card" size="small">Save</Button>
-                        </div>
+                        {/* <div className="modal_head"> */}
+                            <Button variant="contained" color='error' className="save_card" size="small">Save</Button>
+                        {/* </div> */}
                         <div className="modal_foot">
                             <div className="destination">
                                 <div className="pint_mock_icon_container">
@@ -29,12 +29,14 @@ function Pin(props) {
                                 <FileUploadOutlinedIcon />
                             </div>
                             <div className="pint_mock_icon_container">
-                                <MoreHorizRoundedIcon  />
+                                <MoreHorizRoundedIcon />
                             </div>
                         </div>
+                        
+                        <a href={`/show/:${urls.regular}`} urls={urls}><div className="over-lay"></div></a>
                     </div>
                     <div className="pin_image">
-                        <img src={urls?.regular} alt="pin" />
+                        <img src={urls.regular} alt="pin:" />
                     </div>
                 </div>
             </Container>
