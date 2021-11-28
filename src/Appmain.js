@@ -17,13 +17,144 @@ import CategriesSelection from './components/signupComponants/CategriesSelection
 import Profile from "./components/ProfilePage";
 import Popup from "./components/Popup";
 import Details from "./components/Details"
-
+import Setting from './components/Settings/Setting'
+import BoardView from "./components/BoardView";
+import Pin from "./components/Pin";
 
 
 
 function App() {
 
   const [pins, setNewPins] = useState([]);
+  const [allpins, setAllpins] = useState([{
+      id: "1",
+      name: "als",
+      img: {
+        full: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=85",
+        raw: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1",
+        regular: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=80&w=1080",
+        small: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=80&w=400",
+        thumb: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=80&w=200"
+      },
+      discUrl: "https://i.pinimg.com",
+      board: [{ id: '', title: '' }],
+      tags: [],
+      userId: "",
+    }]
+  );
+  const [newboard, setNewBoard] = useState(
+     [{
+      id: "1",
+      title: "alexandria",
+      Pinsid: ["", "", ""]
+    }, {
+      id: "2",
+      title: "cats",
+      Pinsid: ["", "", ""],
+    }])
+  const [user,setUser] = useState({
+      id: "5000",
+      first_name: "anton",
+      last_name: "aly",
+      phone: "01288878418",
+      email: "",
+      password: "",
+      passwordValid: true,
+      age: 0,
+      gender: "male",
+      language: "",
+      country: "",
+      interested: [],
+      token: "",
+      pins: [],
+      boards: [],
+      followers: [],
+      following: []
+    })
+    
+    const [notfications,setNotfications]=useState([{ user_id: "", date: "", title: "" }])
+
+
+  //pin Functions
+  const createPin = (pinItem) => {
+    console.log(pinItem)
+    setAllpins([...allpins,pinItem])
+    console.log(allpins)
+
+  }
+  const deletePin = () => {
+
+  }
+  const editPin = () => {
+
+  }
+  const savePin = () => {
+
+  }
+
+  //boards Functions
+
+  const createBoard = () => {
+
+  }
+  const editBoard = () => {
+
+  }
+  const DeleteBoard = () => {
+
+  }
+
+  //users Functions
+
+  const userLogin = (userLogin) => {
+
+    fetch("https://reqres.in/api/login",{
+            method: "POST",
+                headers: {
+                    'content-type': "application/json"
+                },
+                body: JSON.stringify(userLogin)
+        }).then(res=>res.json())
+        .then(obj=>{  
+            if (obj.token) {
+                alert("login success")
+                setUser({...userLogin})
+                console.log(user)
+                
+            } else {
+                alert(obj.error)
+            }
+            
+        })
+       
+
+  }
+  const userSignup = (newUser) => {
+    console.log(newUser)
+    setUser({...user,...newUser})
+    console.log(user)
+    
+
+  }
+  const userLogout = () => {
+
+  }
+  const userFollowing = () => {
+
+  }
+
+  const userFollower = () => {
+
+  }
+  const userSearch = () => {
+
+  }
+
+  //Notfications Function
+
+  const Notfication = () => {
+
+  }
 
   const getImage = (term) => {
     return unsplash.get("https://api.unsplash.com/search/photos", {
@@ -74,6 +205,10 @@ function App() {
     console.log(pins)
 
   }
+  const boardviewHandler = (item) => {
+    setNewBoard([item])
+    // console.log(newboard)
+  }
 
   useEffect(() => {
     getNewPins();
@@ -84,30 +219,43 @@ function App() {
     <Router>
       <div className="app">
         <Switch>
-        <Route path='/show/:id' render={(props) =>
-        <>
-        <Header onSumbit={onSearchSubmit} />
-        <Details {...props}/>
-        <Mainboard pins={pins} />
-      </>
-        }>
-        {/* <Details  /> */}
-      </Route>
+          <Route path='/show/:id' render={(props) =>
+            <>
+              <Header onSumbit={onSearchSubmit} />
+              <Details {...props} />
+              <Mainboard pins={pins} onadd={boardviewHandler} />
+            </>
+          }>
+            {/* <Details  /> */}
+          </Route>
+          <Route path="/boardview">
+            <Header />
+            <BoardView pins={newboard} />
+          </Route>
+          <Route path="/setting" >
+            <Header />
+            <Setting />
+          </Route>
           <Route path='/add'>
             <Header onSumbit={onSearchSubmit} />
-            <AddPin />
+            <AddPin createPin={createPin} boards={newboard} userID={user.id} />
+            {/* {allpins.map(pin=>(
+              <Pin urls={pin.img} discUrl={pin.discUrl}/>
+            ))} */}
+            
           </Route>
           <Route path='/home'>
             <Header onSumbit={onSearchSubmit} />
-            <Mainboard pins={pins} />
-            <SignupPopup getimage={getNewPins} />
+            <Mainboard pins={pins} onadd={boardviewHandler} />
+            {/* <BoardView pins={newboard} /> */}
+            {/* <SignupPopup getimage={getNewPins} /> */}
           </Route>
           <Route path='/signin'>
-            <Splash />
+            <Splash user={user} signIn={userLogin} signUp={userSignup}/>
           </Route>
           <Route path='/profile'>
             <Profile />
-            <Popup />
+            {/* <Popup /> */}
           </Route>
           <Redirect path='/' to='/signin' />
           {/* <AddPin />  */}

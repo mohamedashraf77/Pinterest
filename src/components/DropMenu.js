@@ -12,6 +12,7 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import Profile from './ProfilePage';
 
 
 export default function AccountMenu() {
@@ -27,6 +28,16 @@ export default function AccountMenu() {
   const logout =() => {
     window.location.href = '/';
     handleClose()
+  }
+  const setting =()=>{
+    window.location.href = '/setting';
+    handleClose()
+
+  }
+  const profileHandler =()=>{
+    window.location.href = '/profile';
+    handleClose()
+
   }
   return (
     <React.Fragment>
@@ -70,22 +81,16 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
+        <MenuItem onClick={profileHandler}>
           <Avatar /> Profile
         </MenuItem>
-        <MenuItem>
-          <Avatar /> My account
-        </MenuItem>
+       
         <Divider />
+       
+ 
         <MenuItem>
           <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <Settings fontSize="small" />
+            <Settings fontSize="small" onClick={setting}/>
           </ListItemIcon>
           Settings
         </MenuItem>

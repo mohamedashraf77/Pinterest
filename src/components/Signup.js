@@ -80,10 +80,7 @@ class SignUp extends React.Component {
             password: "",
             passwordValid:false,
             age:0,
-            gender:"",
-            language:"",
-            country:"",
-            interested:[]
+            
         }
     }
     setemail=(e)=>{
@@ -95,6 +92,11 @@ class SignUp extends React.Component {
     }
     setage=(e)=>{
         this.setState({age:e.target.value})
+    }
+    registration=(e)=>{
+        // e.preventDefault();
+        this.props.signUp(this.state)
+        
     }
 render(){
     const { classes } = this.props;
@@ -123,7 +125,7 @@ render(){
             <Box component="form"  noValidate sx={{ mt: 1, padding: 5 }} >
 
                 <TextField
-                    error
+                    // error
                     margin="normal"
                     required
                     fullWidth
@@ -134,7 +136,7 @@ render(){
                     autoComplete="email"
                     autoFocus
                     className={classes.textFielStyle}
-                    helperText="Incorrect entry."
+                    // helperText="Incorrect entry."
                     onChange={this.setemail}
                     value={this.state.email}
 
@@ -171,11 +173,11 @@ render(){
                 
 
                 <Button
-                    type="submit"
+                    // type="submit"
                     fullWidth
                     variant="contained"
                     sx={{ mt: 3, mb: 2, borderRadius: 30, bgcolor: "red", ":hover": { bgcolor: "darkred" } }}
-                    onClick={(e)=>{window.location.href="/home"; e.preventDefault();}}
+                    onClick={this.registration}
                     // type="submit" 
                 >
                     Continue

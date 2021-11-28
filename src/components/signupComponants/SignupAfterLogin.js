@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Gender from './Gender';
 import { withStyles } from "@mui/styles";
 import CategriesSelection from './CategriesSelection';
+import { CountrySelect } from './LanguagesCountry';
 
 
 const styles = theme => ({
@@ -79,7 +80,7 @@ const styles = theme => ({
       },
 });
 
-const steps = ['Gender', 'Language & Country/Region', 'Intersted in'];
+const steps = ['Gender', 'Intersted in'];
 
 
 
@@ -97,8 +98,6 @@ class SignupAfterLogin extends React.Component {
         case 0:
           return <Gender />;
         case 1:
-          return <Gender />;
-        case 2:
           return <CategriesSelection getimage={this.props.getimage} />;
         
         

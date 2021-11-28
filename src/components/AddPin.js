@@ -3,6 +3,7 @@ import './AddPin.css'
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
 import ArrowCircleUpTwoToneIcon from '@mui/icons-material/ArrowCircleUpTwoTone';
 import Container from '@mui/material/Container';
+import Board from './DropMenuBoard';
 function upload_img(
     event,
     pinDetails,
@@ -15,9 +16,11 @@ function upload_img(
             const reader = new FileReader();
 
             reader.onload = function () {
+                let img={}
                 setPinDetails({
                     ...pinDetails,
                     img_blob: reader.result
+                    // img.push(regular:"https://i.pinimg.com/564x/0e/7b/3c/0e7b3c7ddc5956f5f1890ae4df5a3626.jpg")
                 });
                 setShowLabel(false);
                 setShowModalPin(true);
@@ -40,28 +43,44 @@ function check_size(event) {
     }
     image.style.opacity = 1;
 }
-function save_pin(pinDetails,add_pin) {
+let id=1000;
+
+function save_pin(pinDetails,createPin,userID) {
+    id+=1
     const users_data = {
         ...pinDetails,
-        author: "jack",
-        board: "default",
-        title: document.querySelector("#pin_title").value,
+        // author: "jack",
+        // board: "default",
+        id:id,
+        name: document.querySelector("#pin_title").value,
         description: document.querySelector("#pin_description").value,
-        destination: document.querySelector("#pin_destination").value,
-        pin_size: document.querySelector("#pin_size").value,
+        discUrl: document.querySelector("#pin_destination").value,
+        board: document.querySelector("#pin_size").value,
+        userId:userID
     };
-    add_pin(users_data);
+    createPin(users_data);
 }
 
 function AddPin(props) {
     const [pinDetails, setPinDetails] = useState({
-        author: "",
+        // author: "",
         board: "",
-        title: "",
+        // title: "",
+        // description: "",
+        // destination: "",
+        img:{},
+        // pin_size: "",
+        // needed
+        id: "",
+        name: "",
+        // img: {
+        //   regular: img_blob.v, // image host url
+        // },
+        discUrl: "",
+        board: [{ id: '', title: '' }],
+        tags: [],
         description: "",
-        destination: "",
-        img_blob: "",
-        pin_size: ""
+        userId:"",
     })
     const [showLabel, setShowLabel] = useState(true);
     const [showModalPin, setShowModalPin] = useState(false);
@@ -111,11 +130,14 @@ function AddPin(props) {
                         <div className="select_size">
                             <select defaultValue="Select" name="pin_size" id="pin_size">
                                 <option value="">Select</option>
-                                <option value="small">small</option>
-                                <option value="medium">medium</option>
-                                <option value="large">large</option>
+                                {props.boards.map(board=>(
+                                    <option value={board.title}>{board.title}</option>
+                                ))}
+                                {/* <option value="medium">medium</option>
+                                <option value="large">large</option> */}
                             </select>
-                            <div onClick={() => save_pin(pinDetails,props.add_pin)} className="save_pin">Save</div>
+                            {/* <div onClick={() => console.log(props.boards[0].title)} className="save_pin">cons</div> */}
+                            <div onClick={() => save_pin(pinDetails,props.createPin,props.userID)} className="save_pin">Save</div>
                         </div>
                     </div>
                     <div className="setction2">

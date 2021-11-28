@@ -1,23 +1,21 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
+
 // import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+
 // import { Link } from '@mui/material';
 import {Link} from 'react-router-dom'
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 
-export default function AccountMenu() {
+export default function Board() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -30,8 +28,8 @@ export default function AccountMenu() {
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
         
-        <Tooltip title="Account settings">
-            <KeyboardArrowDownIcon onClick={handleClick} />
+        <Tooltip title="Board">
+            <MoreVertIcon onClick={handleClick} />
         </Tooltip>
       </Box>
       <Menu
@@ -68,32 +66,20 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem>
-          <Avatar /> My account
-        </MenuItem>
-        <Divider />
-        <MenuItem>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
-        <MenuItem  >
 
+        <MenuItem>
           <ListItemIcon>
-            <Logout fontSize="small" onClick={()=>console.log("hello")}/>
+            <EditIcon fontSize="small" />
           </ListItemIcon>
-          Logout
+          Edit
         </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <DeleteIcon fontSize="small" />
+          </ListItemIcon>
+          Delete
+        </MenuItem>
+
       </Menu>
     </React.Fragment>
   );

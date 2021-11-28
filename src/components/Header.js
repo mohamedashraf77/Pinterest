@@ -8,7 +8,7 @@ import FaceIcon from "@mui/icons-material/Face";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import TextsmsIcon from "@mui/icons-material/Textsms";
 import DropMenu from './DropMenu'
-import {Redirect} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 
 function Header(props) {
@@ -29,7 +29,7 @@ function Header(props) {
                 </IconButton>
             </LogoWrapper>
             <HomePageButton>
-                <a href="/">Home</a>
+                <a href="/home">Home</a>
             </HomePageButton>
             {/* <FollowingButton>
                 <a href="/">Following</a>
@@ -49,11 +49,11 @@ function Header(props) {
                 <IconButton>
                     <NotificationsIcon />
                 </IconButton>
-                <IconButton>
+                {/* <IconButton>
                     <TextsmsIcon />
-                </IconButton>
+                </IconButton> */}
                 <IconButton>
-                    <FaceIcon />
+                   <Link to="/profile"> <FaceIcon /></Link>
                 </IconButton>
                 <IconButton>
                     <DropMenu />

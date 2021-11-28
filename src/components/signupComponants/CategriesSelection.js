@@ -4,6 +4,7 @@ import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import IconButton from "@mui/material/IconButton";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 function srcset(image, width, height, rows = 1, cols = 1) {
   return {
@@ -60,7 +61,7 @@ export default function CategriesSelection({getimage}) {
                   aria-label={`star ${item.title}`}
                   onClick={()=>onclick(item.title)}
                 >
-                  <StarBorderIcon />
+                  <CheckBoxIcon />
                 </IconButton>
               }
               actionPosition="left"

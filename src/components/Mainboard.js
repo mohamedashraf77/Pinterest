@@ -9,16 +9,21 @@ import {Link} from 'react-router-dom'
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 
-function Mainboard(props) {
-    let { pins } = props
+function Mainboard({pins , onadd}) {
+    //let { pins } = props
     console.log(pins);
+    const addhandler=(item)=>{
+        let x={...item}
+        onadd(x)
+        
+    }
 
     return (
         <Wrapper>
             <Container className='mainboard__container'>
                 {pins.map((pin, index) => {
                     let { urls } = pin;
-                    return <Pin key={index} urls={urls} />
+                    return <Pin key={index} urls={urls} discUrl={urls.regular} savePin={addhandler}/>
                 })}
 
             </Container>

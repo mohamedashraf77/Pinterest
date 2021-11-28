@@ -7,6 +7,11 @@ import Fade from '@mui/material/Fade';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from "@mui/material/IconButton";
 import styled from 'styled-components'
+import { withStyles } from "@mui/styles";
+import TextField from '@mui/material/TextField';
+import Blank from './images/blank.jpg'
+
+
 
 
 const style = {
@@ -21,7 +26,39 @@ const style = {
     p: 4,
 };
 
-export default class Popup extends React.Component {
+const styles = theme => ({
+    textFielStyle: {
+        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+            borderRadius: 30
+        },
+
+        "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+            borderColor: "red"
+        },
+        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "red"
+        },
+        "& label.Mui-focused": {
+            color: "red"
+        }
+    },
+    bottmStyle: {
+        backgroundColor: "red",
+        "&:hover": {
+            backgroundColor: "darkred"
+        }
+
+    },
+    containerStyle: {
+        "& .MuiContainer-root": {
+            backgroundColor: "gray"
+        }
+    }
+});
+
+
+
+class Popup extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -31,21 +68,46 @@ export default class Popup extends React.Component {
 
     handleOpen = () => {
         this.setState({ open: true });
-        
+
     }
     handleClose = () => {
         this.setState({ open: false });
     }
 
-    //   const [open, setOpen] = React.useState(false);
-    //   const handleOpen = () => setOpen(true);
-    //   const handleClose = () => setOpen(false);
+    addBoard = () => {
+        let board = {
+            name: this.state.text,
+            images: [{
+                img: "https://lh3.googleusercontent.com/proxy/JrFz9msZPb5Z410NsSdw3aWxIBCxtcQny3lcffC5Xwn7wMr_ItasVE0gZyo41Flwb6SbsyuuZopPLjR7EU31qRjOejaJGgPh9FecQM5zKulVdJtRBjfz",
+                cols: 2,
+                rows: 2
+            },
+            {
+                img: "https://lh3.googleusercontent.com/proxy/JrFz9msZPb5Z410NsSdw3aWxIBCxtcQny3lcffC5Xwn7wMr_ItasVE0gZyo41Flwb6SbsyuuZopPLjR7EU31qRjOejaJGgPh9FecQM5zKulVdJtRBjfz",
+            },
+            {
+                img: "https://lh3.googleusercontent.com/proxy/JrFz9msZPb5Z410NsSdw3aWxIBCxtcQny3lcffC5Xwn7wMr_ItasVE0gZyo41Flwb6SbsyuuZopPLjR7EU31qRjOejaJGgPh9FecQM5zKulVdJtRBjfz",
+            }],
+            pin: 0,
+            time: "1s"
+        }
+        // alert(this.state.text)
+        this.props.addBoardfromPopup(board)
+        this.handleClose()
+    }
+    setText=(e)=>{
+        this.setState({text:e.target.value})
+        
+    }
+
+  
     render() {
+        const { classes } = this.props;
         return <div>
 
-<IconWrapper >
+            <IconWrapper >
                 <IconButton>
-                     <AddIcon onClick={this.handleOpen} sx={{float:"right",cursor:"pointer" ,fontSize: 40}}/>
+                    <AddIcon onClick={this.handleOpen} sx={{ float: "right", cursor: "pointer", fontSize: 40 }} />
                 </IconButton>
             </IconWrapper>
             <Modal
@@ -61,6 +123,27 @@ export default class Popup extends React.Component {
             >
                 <Fade in={this.state.open}>
                     <Box sx={style}>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="text"
+                            label="Board Name"
+                            type="text"
+                            id="text"
+                            autoComplete="Board Name"
+                            className={classes.textFielStyle}
+                            onChange={this.setText}
+
+                        />
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2, borderRadius: 30, bgcolor: "red", ":hover": { bgcolor: "darkred" } }}
+                            onClick={this.addBoard}
+                        >
+                            Add Board
+                        </Button>
                     </Box>
                 </Fade>
             </Modal>
@@ -73,3 +156,4 @@ export default class Popup extends React.Component {
 const IconWrapper = styled.div`
 float:right;
 `
+export default withStyles(styles)(Popup);

@@ -3,17 +3,21 @@ import profile from './images/profile.jpg'
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Header from "./Header";
-import { Box, Container, Typography, Grid, Button, Divider, List, ListItem,Icon } from "@mui/material";
+import { Box, Container, Typography, Grid, Button, Divider, List, ListItem, Icon } from "@mui/material";
 // import { styled } from '@mui/material/styles';
 
 import Paper from '@mui/material/Paper';
-import styled from 'styled-components'
+// import styled from 'styled-components'
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { bgcolor } from "@mui/system";
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from "@mui/material/IconButton";
 import Popup from "./Popup";
+import DeleteIcon from '@mui/icons-material/Delete';
+import Menu, { MenuProps } from '@mui/material/Menu';
+import { styled, alpha } from '@mui/material/styles';
+import Board from "./DropMenuBoard";
 
 
 
@@ -26,6 +30,8 @@ function srcset(image: string, size: number, rows = 1, cols = 1) {
             }&fit=crop&auto=format&dpr=2 2x`
     };
 }
+
+
 
 class Profile extends React.Component {
     constructor() {
@@ -48,13 +54,13 @@ class Profile extends React.Component {
                 {
                     img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-199485986.jpg",
                 }],
-                pin:5,
-                time:"2w"
+                pin: 5,
+                time: "2w"
 
             },
-            
+
             {
-                name: "Breackfast",
+                name: "Breakfast",
                 images: [{
                     img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
                     cols: 2,
@@ -66,8 +72,8 @@ class Profile extends React.Component {
                 {
                     img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
                 }],
-                pin:5,
-                time:"2w"
+                pin: 5,
+                time: "2w"
 
             },
             {
@@ -83,12 +89,12 @@ class Profile extends React.Component {
                 {
                     img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-199485986.jpg",
                 }],
-                pin:3,
-                time:"2w"
+                pin: 3,
+                time: "2w"
 
             },
             {
-                name: "Breackfast",
+                name: "Breakfast",
                 images: [{
                     img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
                     cols: 2,
@@ -100,21 +106,26 @@ class Profile extends React.Component {
                 {
                     img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
                 }],
-                pin:2,
-                time:"2w"
+                pin: 2,
+                time: "2w"
 
             },
-            
+
 
             ]
 
         }
     }
 
-    dataToShow =()=>{
+    dataToShow = () => {
         return <div>
             hii
         </div>
+    }
+    addBoard = (item) => {
+        this.state.board.push(item)
+        this.setState({ items: this.state.board });
+
     }
 
     render() {
@@ -149,7 +160,7 @@ class Profile extends React.Component {
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2, borderRadius: 30, bgcolor: "gray", ":hover": { bgcolor: "darkgray" }, width: 200 }}
-                        onClick={(e) => { window.location.href = "/home"; e.preventDefault(); }}
+                        onClick={(e) => { window.location.href = "/setting"; e.preventDefault(); }}
                     // type="submit" 
                     >
                         Edit Profile
@@ -159,11 +170,11 @@ class Profile extends React.Component {
             </Container>
             <Divider variant="middle" sx={{ margin: 3 }} />
             <Container>
-                <Popup dataToShow={this.dataToShow}/>
-           
-            
+                <Popup addBoardfromPopup={this.addBoard} />
+
+
             </Container>
-           
+
 
             <Container>
 
@@ -172,7 +183,7 @@ class Profile extends React.Component {
                         <Grid item xs={3} >
 
                             <a href="#">
-                                <Box sx={{ borderRadius: 5, padding: 1,}}>
+                                <Box sx={{ borderRadius: 5, padding: 1, }}>
 
                                     {/* <ImageList variant="masonry" cols={3} gap={8} sx={{ borderRadius: 4 }}>
                                         {cat.images.filter((image, idx) => idx < 4).map(image => (
@@ -208,14 +219,35 @@ class Profile extends React.Component {
                                         ))}
                                     </ImageList>
                                 </Box>
-
-                                <Typography component="h2" variant="h6" sx={{  color: "black", fontWeight: "bold" ,marginLeft:5,top:0}}>
-                                    {cat.name}
-                                </Typography>
-                                <Typography  variant="subtitle2" sx={{  color: "black",marginLeft:5,top:0}}>
-                                    {cat.pin} Pins {cat.time}
-                                </Typography>
                             </a>
+                            <Grid container >
+                                <Grid item sx={6}>
+
+                                    <Typography component="h2" variant="h6" sx={{ color: "black", fontWeight: "bold", marginLeft: 5, top: 0 }}>
+                                        {cat.name}
+                                    </Typography>
+                                    <Typography variant="subtitle2" sx={{ color: "black", marginLeft: 5, top: 0 }}>
+                                        {cat.pin} Pins {cat.time}
+                                    </Typography>
+                                </Grid>
+                                <Grid >
+                                    
+                                    
+                                    
+                                    {/* <IconWrapper sx={{ float: "right" }}> */}
+                                    <Container sx={{float:"right"}}>
+                                        <IconButton>
+                                            {/* <DeleteIcon sx={{ float: "right", cursor: "pointer", fontSize: 20 }} /> */}
+                                            <Board />
+                                        </IconButton>
+                                    {/* </IconWrapper>   */}
+                                    </Container>
+                                   
+
+
+                                </Grid>
+
+                            </Grid>
                         </Grid>
                     ))}
                 </Grid>

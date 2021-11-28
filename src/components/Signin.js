@@ -88,22 +88,12 @@ class SignIn extends React.Component {
     }
     submit=(e)=>{
         e.preventDefault();
-        fetch("https://reqres.in/api/login",{
-            method: "POST",
-                headers: {
-                    'content-type': "application/json"
-                },
-                body: JSON.stringify(this.state)
-        }).then(res=>res.json())
-        .then(obj=>{  
-            if (obj.token) {
-                alert("login success")
-                
-            } else {
-                alert(obj.error)
-            }
-            
-        })
+        this.props.signIn(this.state)
+        // if (this.state.email == "antonsamirabdu@gmail.com" & this.state.password == "123") {
+        //     window.location.href ="/home"
+        // }else {
+        //     alert ("email or password not valid")
+        // }
         
     }
 render(){

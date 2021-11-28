@@ -46,8 +46,8 @@ export default class Splash extends React.Component{
 
                         <Item>
                             <Switch>
-                                <Route path = "/signin" ><SignIn /></Route>
-                                <Route path = "/signup" ><SignUp /></Route>
+                                <Route path = "/signin" ><SignIn user={this.props.user} signIn={this.props.signIn}/></Route>
+                                <Route path = "/signup" ><SignUp user={this.props.user} signUp={this.props.signUp}/></Route>
                                 
                                 
                             </Switch>
