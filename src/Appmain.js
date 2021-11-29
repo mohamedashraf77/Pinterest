@@ -26,78 +26,97 @@ function App() {
 
   const [pins, setNewPins] = useState([]);
   const [allpins, setAllpins] = useState([{
-      id: "1",
-      name: "als",
-      img: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=80&w=1080",
-      discUrl: "https://i.pinimg.com",
-      board: [{ id: '', title: '' }],
-      tags: [],
-      userId: "",
-    },
-    {
-      id: "2",
-      name: "als",
-      img: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=80&w=1080",
-      discUrl: "https://i.pinimg.com",
-      board: [{ id: '', title: '' }],
-      tags: [],
-      userId: "",
-    }]
+    id: "1",
+    name: "als",
+    img: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=80&w=1080",
+    discUrl: "https://i.pinimg.com",
+    board: [{ id: '2', title: 'cat' }],
+    tags: [],
+    userId: "",
+    description: "decripttion test",
+  },
+  {
+    id: "2",
+    name: "als",
+    img: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=80&w=1080",
+    discUrl: "https://i.pinimg.com",
+    board: [{ id: '1', title: 'alexandria' }],
+    tags: [],
+    userId: "",
+    description: "decripttion test",
+  }]
   );
   const [newboard, setNewBoard] = useState(
-     [{
+    [{
       id: "1",
       title: "alexandria",
-      Pinsid: ["", "", ""]
-    }, {
-      id: "2",
-      title: "cats",
-      Pinsid: ["", "", ""],
+      pins: [{
+        id: "",
+        img: "https://image.shutterstock.com/z/stock-photo-business-accelerator-program-providing-a-launch-pad-for-companies-d-illustration-render-539542939.jpg",
+        cols: 2,
+        rows: 2
+      },
+      {
+        id: "",
+        img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-shaving-effect-657743737.jpg",
+      },
+      {
+        id: "",
+        img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-199485986.jpg",
+      }],
+      pin: 5,
+      time: "2w"
+
+
     }])
-  const [user,setUser] = useState({
-      id: "5000",
-      first_name: "anton",
-      last_name: "aly",
-      Avatar:"",
-      phone: "01288878418",
-      email: "",
-      password: "",
-      passwordValid: true,
-      age: 0,
-      gender: "male",
-      language: "",
-      country: "",
-      interested: ["sport","car","camera","food","watch"],
-      token: "",
-      pins: [],
-      boards: [],
-      followers: [],
-      following: []
-    })
-    
-    const [notfications,setNotfications]=useState([{ user_id: "", date: "", title: "" }])
+  const [user, setUser] = useState({
+    id: "5000",
+    first_name: "anton",
+    last_name: "aly",
+    Avatar: "",
+    phone: "01288878418",
+    email: "",
+    password: "",
+    passwordValid: true,
+    age: 0,
+    gender: "male",
+    language: "",
+    country: "",
+    interested: ["sport", "car", "camera", "food", "watch"],
+    token: "",
+    pins: [],
+    boards: [],
+    followers: ['', ''],
+    following: ['', '', '']
+  })
+
+  const [notfications, setNotfications] = useState([{ user_id: "", date: "", title: "" }])
 
 
   //pin Functions
   const createPin = (pinItem) => {
     // console.log(pinItem)
-    setAllpins([...allpins,pinItem])
+    setAllpins([...allpins, pinItem])
     // console.log(allpins)
 
   }
   const deletePin = (id) => {
 
-    setAllpins(allpins.filter(pin=>pin.id !== id))
+    setAllpins(allpins.filter(pin => pin.id !== id))
 
   }
-  const editPin = (id) => {
-    // let editItem = allpins.findIndex(pin => pin.id === id.pinId)
-    // console.log(editItem)
-    // console.log(id)
-    // return editItem
+  const editPin = (pindetails) => {
+
+    let itemIndex = allpins.findIndex((item) => item.id == pindetails.id)
+    console.log(itemIndex)
+    allpins[itemIndex] = pindetails
+    setAllpins(allpins)
+    console.log(allpins)
+
 
   }
   const savePin = () => {
+
 
   }
 
@@ -117,32 +136,32 @@ function App() {
 
   const userLogin = (userLogin) => {
 
-    fetch("https://reqres.in/api/login",{
-            method: "POST",
-                headers: {
-                    'content-type': "application/json"
-                },
-                body: JSON.stringify(userLogin)
-        }).then(res=>res.json())
-        .then(obj=>{  
-            if (obj.token) {
-                alert("login success")
-                setUser({...userLogin})
-                console.log(user)
-                
-            } else {
-                alert(obj.error)
-            }
-            
-        })
-       
+    fetch("https://reqres.in/api/login", {
+      method: "POST",
+      headers: {
+        'content-type': "application/json"
+      },
+      body: JSON.stringify(userLogin)
+    }).then(res => res.json())
+      .then(obj => {
+        if (obj.token) {
+          alert("login success")
+          setUser({ ...userLogin })
+          console.log(user)
+
+        } else {
+          alert(obj.error)
+        }
+
+      })
+
 
   }
   const userSignup = (newUser) => {
     console.log(newUser)
-    setUser({...user,...newUser})
+    setUser({ ...user, ...newUser })
     console.log(user)
-    
+
 
   }
   const userLogout = () => {
@@ -158,13 +177,15 @@ function App() {
   const userSearch = () => {
 
   }
-  const userInterest =(imageList)=>{
+  const userInterest = (imageList) => {
     console.log(imageList)
     user.interested.push(...imageList)
-    setUser({interested:user.interested})
+    setUser({ interested: user.interested })
     console.log(user.interested)
-
-
+  }
+  const gender = (item) => {
+    user.gender=item
+    setUser({gender:user.gender})
   }
 
   //Notfications Function
@@ -236,14 +257,14 @@ function App() {
     <Router>
       <div className="app">
         <Switch>
-            <Route path='/edit/:id' render={(props) =>
+          <Route path='/edit/:id' render={(props) =>
             <>
               <Header onSumbit={onSearchSubmit} />
-              <EditPin pins={allpins} board={newboard} {...props}/>
+              <EditPin pins={allpins} board={newboard} {...props} userID={user.id} editPin={editPin} />
 
             </>
           }>
-            </Route>
+          </Route>
           <Route path='/show/:id' render={(props) =>
             <>
               <Header onSumbit={onSearchSubmit} />
@@ -264,22 +285,22 @@ function App() {
           <Route path='/add'>
             <Header onSumbit={onSearchSubmit} />
             <AddPin createPin={createPin} boards={newboard} userID={user.id} />
-            {allpins.map(pin=>(
-              <Pin urls={pin.img} discUrl={pin.discUrl} deletePin={deletePin}key={pin.id} pinId={pin.id} onEdit={editPin}/>
+            {allpins.map(pin => (
+              <Pin urls={pin.img} discUrl={pin.discUrl} deletePin={deletePin} key={pin.id} pinId={pin.id} onEdit={editPin} />
             ))}
-            
+
           </Route>
           <Route path='/home'>
             <Header onSumbit={onSearchSubmit} />
             <Mainboard pins={pins} onadd={boardviewHandler} />
             {/* <BoardView pins={newboard} /> */}
-            <SignupPopup getimage={userInterest} />
+            <SignupPopup getimage={userInterest} gender={gender}/>
           </Route>
           <Route path='/signin'>
-            <Splash user={user} signIn={userLogin} signUp={userSignup}/>
+            <Splash user={user} signIn={userLogin} signUp={userSignup} />
           </Route>
           <Route path='/profile'>
-            <Profile />
+            <Profile userData={user} boards={newboard} />
             {/* <Popup /> */}
           </Route>
           <Redirect path='/' to='/signin' />

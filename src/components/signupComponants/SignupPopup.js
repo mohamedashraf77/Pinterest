@@ -59,7 +59,7 @@ export default class SignupPopup extends React.Component {
             >
                 <Fade in={this.state.open}>
                     <Box sx={style}>
-                        <SignupAfterLogin getimage={this.props.getimage} />
+                        <SignupAfterLogin getimage={this.props.getimage} gender={this.props.gender}/>
                     </Box>
                 </Fade>
             </Modal>

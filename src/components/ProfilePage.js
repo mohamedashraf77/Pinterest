@@ -34,13 +34,16 @@ function srcset(image: string, size: number, rows = 1, cols = 1) {
 
 
 class Profile extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        let user = this.props.userData;
+        // let boards = this.props.boards
         this.state = {
-            name: "Anton Samir",
+            first_name:user.first_name,
+            last_name:user.last_name,
             profileimg: profile,
-            followers: 30,
-            following: 23,
+            followers: user.followers.length,
+            following: user.following.length,
             board: [{
                 name: "All Pins",
                 images: [{
@@ -127,6 +130,10 @@ class Profile extends React.Component {
         this.setState({ items: this.state.board });
 
     }
+    componentDidMount=()=>{
+        // console.log(this.props)
+        // console.log(this.props.boards)
+    }
 
     render() {
         return <div>
@@ -150,7 +157,7 @@ class Profile extends React.Component {
 
 
                     <Typography component="h1" variant="h5" sx={{ fontSize: 35, color: 'black', fontWeight: "bold" }}>
-                        {this.state.name}
+                        {this.state.first_name} {this.state.last_name}
                     </Typography>
                     <Typography variant="subtitle2" sx={{ fontSize: 15, color: 'black', fontWeight: "bold" }}>
                         {this.state.followers} followers · {this.state.following} following
@@ -179,7 +186,7 @@ class Profile extends React.Component {
             <Container>
 
                 <Grid container>
-                    {this.state.board.map((cat, i) => (
+                    {this.props.boards.map((cat, i) => (
                         <Grid item xs={3} >
 
                             <a href="#">

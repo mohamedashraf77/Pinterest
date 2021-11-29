@@ -91,7 +91,8 @@ class SignupAfterLogin extends React.Component {
         super();
         this.state={
             activeStep:0,
-            listInterest:[]
+            listInterest:[],
+            gender:""
 
 
         }
@@ -99,7 +100,7 @@ class SignupAfterLogin extends React.Component {
      getStepContent=(step)=> {
       switch (step) {
         case 0:
-          return <Gender />;
+          return <Gender  genderFromPopup={this.genderFromPopup}/>;
         case 1:
           return <CategriesSelection getimage={this.props.getimage} listInterest={this.listInterest} />;
         
@@ -107,20 +108,26 @@ class SignupAfterLogin extends React.Component {
       }
     }
     listInterest=(item)=>{
-// console.log("list Interest")
-      // console.log(list)
       this.state.listInterest.push(item)
       this.setState({listInterest:this.state.listInterest})
-      console.log(this.state.listInterest)
+      // console.log(this.state.listInterest)
+    }
+    genderFromPopup=(gender)=>{
+      this.setState({gender:gender})
       
 
     }
 
   handleNext = () => {
-    this.props.getimage(this.state.listInterest)
     this.setState(prevState => {
-        return {activeStep: prevState.activeStep + 1}
-     })
+      return {activeStep: prevState.activeStep + 1}
+   })
+    if (this.state.listInterest.length === 0){
+      return ;
+    }
+    this.props.getimage(this.state.listInterest)
+    this.props.gender(this.state.gender)
+    
     //  this.props.getimage()
   };
 
