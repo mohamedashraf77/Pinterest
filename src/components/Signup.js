@@ -95,6 +95,7 @@ class SignUp extends React.Component {
     }
     registration=(e)=>{
         // e.preventDefault();
+        console.log(this.state)
         this.props.signUp(this.state)
         
     }

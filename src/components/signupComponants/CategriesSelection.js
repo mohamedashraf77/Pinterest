@@ -15,13 +15,16 @@ function srcset(image, width, height, rows = 1, cols = 1) {
   };
 }
 
-export default function CategriesSelection({getimage}) {
+export default function CategriesSelection({listInterest}) {
+  
   const onclick =  (x)=>{
-    let categry = x
-    getimage(categry)
-
-
+    // categry.push(x)
+    console.log(x)
+    listInterest(x)
+    
   }
+  // getimage(categry)
+
   return (
     <ImageList
       sx={{

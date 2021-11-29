@@ -7,7 +7,7 @@ import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
 import {Link} from 'react-router-dom'
 
-function Pin({urls,discUrl,savePin}) {
+function Pin({urls,discUrl,savePin,deletePin,pinId,onEdit}) {
     let imgurl = discUrl
     // console.log(imgurl.slice(0,11))
 
@@ -41,17 +41,17 @@ function Pin({urls,discUrl,savePin}) {
                                 <span>{imgurl.slice(0,11)}</span>
                             </div></a>
                             <div className="pint_mock_icon_container">
-                                <FileUploadOutlinedIcon />
+                                <Link to={`/edit/${pinId}`}> <FileUploadOutlinedIcon onClick={()=>onEdit({pinId})}/></Link>
                             </div>
                             <div className="pint_mock_icon_container">
-                                <MoreHorizRoundedIcon />
+                                <MoreHorizRoundedIcon onClick={()=>(deletePin(pinId))} />
                             </div>
                         </div>
                         
-                        <a href={`/show/:${urls.regular}`} ><div className="over-lay"></div></a>
+                        <a href={`/show/:${urls}`} ><div className="over-lay"></div></a>
                     </div>
                     <div className="pin_image">
-                        <img src={urls.regular} alt="pin:" />
+                        <img src={urls} alt="pin:" />
                     </div>
                 </div>
             </Container>

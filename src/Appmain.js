@@ -2,9 +2,6 @@
 import Splash from "./components/Splash";
 import SignIn from "./components/Signin";
 import SignUp from "./components/Signup";
-
-
-
 import './App.css';
 import React, { useState, useEffect } from "react";
 import Header from './components/Header';
@@ -20,6 +17,8 @@ import Details from "./components/Details"
 import Setting from './components/Settings/Setting'
 import BoardView from "./components/BoardView";
 import Pin from "./components/Pin";
+import { Avatar } from '@mui/material/Avatar';
+import EditPin from './components/EditPin';
 
 
 
@@ -29,13 +28,16 @@ function App() {
   const [allpins, setAllpins] = useState([{
       id: "1",
       name: "als",
-      img: {
-        full: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=85",
-        raw: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1",
-        regular: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=80&w=1080",
-        small: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=80&w=400",
-        thumb: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=80&w=200"
-      },
+      img: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=80&w=1080",
+      discUrl: "https://i.pinimg.com",
+      board: [{ id: '', title: '' }],
+      tags: [],
+      userId: "",
+    },
+    {
+      id: "2",
+      name: "als",
+      img: "https://images.unsplash.com/photo-1494947665470-20322015e3a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNzY3Mjh8MHwxfHNlYXJjaHwxMHx8ZG9nc3xlbnwwfHx8fDE2MzgwMTM3ODI&ixlib=rb-1.2.1&q=80&w=1080",
       discUrl: "https://i.pinimg.com",
       board: [{ id: '', title: '' }],
       tags: [],
@@ -56,6 +58,7 @@ function App() {
       id: "5000",
       first_name: "anton",
       last_name: "aly",
+      Avatar:"",
       phone: "01288878418",
       email: "",
       password: "",
@@ -64,7 +67,7 @@ function App() {
       gender: "male",
       language: "",
       country: "",
-      interested: [],
+      interested: ["sport","car","camera","food","watch"],
       token: "",
       pins: [],
       boards: [],
@@ -77,15 +80,21 @@ function App() {
 
   //pin Functions
   const createPin = (pinItem) => {
-    console.log(pinItem)
+    // console.log(pinItem)
     setAllpins([...allpins,pinItem])
-    console.log(allpins)
+    // console.log(allpins)
 
   }
-  const deletePin = () => {
+  const deletePin = (id) => {
+
+    setAllpins(allpins.filter(pin=>pin.id !== id))
 
   }
-  const editPin = () => {
+  const editPin = (id) => {
+    // let editItem = allpins.findIndex(pin => pin.id === id.pinId)
+    // console.log(editItem)
+    // console.log(id)
+    // return editItem
 
   }
   const savePin = () => {
@@ -149,6 +158,14 @@ function App() {
   const userSearch = () => {
 
   }
+  const userInterest =(imageList)=>{
+    console.log(imageList)
+    user.interested.push(...imageList)
+    setUser({interested:user.interested})
+    console.log(user.interested)
+
+
+  }
 
   //Notfications Function
 
@@ -185,7 +202,7 @@ function App() {
   const getNewPins = (categry = "") => {
     let promises = [];
     let pinData = [];
-    let pins = ["ocean", "Tokyo", "dogs", "Burger"];
+    let pins = [...user.interested];
     pins.push(categry)
     pins.forEach((pinTerm) => {
       promises.push(
@@ -219,6 +236,14 @@ function App() {
     <Router>
       <div className="app">
         <Switch>
+            <Route path='/edit/:id' render={(props) =>
+            <>
+              <Header onSumbit={onSearchSubmit} />
+              <EditPin pins={allpins} board={newboard} {...props}/>
+
+            </>
+          }>
+            </Route>
           <Route path='/show/:id' render={(props) =>
             <>
               <Header onSumbit={onSearchSubmit} />
@@ -239,16 +264,16 @@ function App() {
           <Route path='/add'>
             <Header onSumbit={onSearchSubmit} />
             <AddPin createPin={createPin} boards={newboard} userID={user.id} />
-            {/* {allpins.map(pin=>(
-              <Pin urls={pin.img} discUrl={pin.discUrl}/>
-            ))} */}
+            {allpins.map(pin=>(
+              <Pin urls={pin.img} discUrl={pin.discUrl} deletePin={deletePin}key={pin.id} pinId={pin.id} onEdit={editPin}/>
+            ))}
             
           </Route>
           <Route path='/home'>
             <Header onSumbit={onSearchSubmit} />
             <Mainboard pins={pins} onadd={boardviewHandler} />
             {/* <BoardView pins={newboard} /> */}
-            {/* <SignupPopup getimage={getNewPins} /> */}
+            <SignupPopup getimage={userInterest} />
           </Route>
           <Route path='/signin'>
             <Splash user={user} signIn={userLogin} signUp={userSignup}/>

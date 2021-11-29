@@ -23,7 +23,7 @@ function Mainboard({pins , onadd}) {
             <Container className='mainboard__container'>
                 {pins.map((pin, index) => {
                     let { urls } = pin;
-                    return <Pin key={index} urls={urls} discUrl={urls.regular} savePin={addhandler}/>
+                    return <Pin key={index} urls={urls.regular} discUrl={urls.regular} savePin={addhandler}/>
                 })}
 
             </Container>

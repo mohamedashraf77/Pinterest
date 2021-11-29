@@ -42,7 +42,7 @@ class Profile extends React.Component {
             followers: 30,
             following: 23,
             board: [{
-                name: "Acceleration",
+                name: "All Pins",
                 images: [{
                     img: "https://image.shutterstock.com/z/stock-photo-business-accelerator-program-providing-a-launch-pad-for-companies-d-illustration-render-539542939.jpg",
                     cols: 2,
