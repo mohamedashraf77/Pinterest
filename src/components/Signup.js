@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { withStyles } from "@mui/styles";
 
 
+
 // const useStyles = makeStyles(theme => ({
 //     textField:{
 //         border :"1px solid red"
@@ -94,9 +95,10 @@ class SignUp extends React.Component {
         this.setState({age:e.target.value})
     }
     registration=(e)=>{
-        // e.preventDefault();
+        e.preventDefault();
         console.log(this.state)
         this.props.signUp(this.state)
+        // this.props.history.push("/home");
         
     }
 render(){
@@ -123,7 +125,7 @@ render(){
             <Typography variant="body1" sx={{ fontSize: 18, color: 'gray' }}>
                 Find new ideas to try
             </Typography>
-            <Box component="form"  noValidate sx={{ mt: 1, padding: 5 }} >
+            <Box component="form" noValidate sx={{ mt: 1, padding: 5 }} >
 
                 <TextField
                     // error
@@ -179,7 +181,7 @@ render(){
                     variant="contained"
                     sx={{ mt: 3, mb: 2, borderRadius: 30, bgcolor: "red", ":hover": { bgcolor: "darkred" } }}
                     onClick={this.registration}
-                    // type="submit" 
+                    //  type="submit" 
                 >
                     Continue
                 </Button>

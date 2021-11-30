@@ -9,7 +9,7 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import bground from './images/bground.png'
 import SignUp from "./Signup";
-import { BrowserRouter as Router, Route , Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route , Switch,Redirect } from "react-router-dom";
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -47,7 +47,8 @@ export default class Splash extends React.Component{
                         <Item>
                             <Switch>
                                 <Route path = "/signin" ><SignIn user={this.props.user} signIn={this.props.signIn}/></Route>
-                                <Route path = "/signup" ><SignUp user={this.props.user} signUp={this.props.signUp}/></Route>
+                                <Route path = "/signup" render={props=><SignUp user={this.props.user}{...props} signUp={this.props.signUp}/>} />
+                                {/* <Redirect  to='/home' /> */}
                                 
                                 
                             </Switch>

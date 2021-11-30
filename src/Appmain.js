@@ -3,12 +3,12 @@ import Splash from "./components/Splash";
 import SignIn from "./components/Signin";
 import SignUp from "./components/Signup";
 import './App.css';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect  } from "react";
 import Header from './components/Header';
 import Mainboard from './components/Mainboard';
 import unsplash from './api/unsplash';
 import AddPin from './components/AddPin';
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route,useHistory, Switch, Redirect } from "react-router-dom";
 import SignupPopup from './components/signupComponants/SignupPopup'
 import CategriesSelection from './components/signupComponants/CategriesSelection'
 import Profile from "./components/ProfilePage";
@@ -19,11 +19,13 @@ import BoardView from "./components/BoardView";
 import Pin from "./components/Pin";
 import { Avatar } from '@mui/material/Avatar';
 import EditPin from './components/EditPin';
+import axios from "axios";
+import { withRouter } from "react-router-dom";
 
 
 
 function App() {
-
+  //let history = useHistory();
   const [pins, setNewPins] = useState([]);
   const [allpins, setAllpins] = useState([{
     id: "1",
@@ -70,20 +72,20 @@ function App() {
 
     }])
   const [user, setUser] = useState({
-    id: "5000",
-    first_name: "anton",
-    last_name: "aly",
-    Avatar: "",
-    phone: "01288878418",
-    email: "",
-    password: "",
-    passwordValid: true,
-    age: 0,
-    gender: "male",
-    language: "",
-    country: "",
-    interested: ["sport", "car", "camera", "food", "watch"],
-    token: "",
+    id: '',
+    first_name: '',
+    last_name: '',
+    Avatar: '',
+    phone: '',
+    email: '',
+    password: '',
+    passwordValid: '',
+    age: '',
+    gender: '',
+    language: '',
+    country: '',
+    interested: [],
+    Authorization: '',
     pins: [],
     boards: [],
     followers: ['', ''],
@@ -157,13 +159,47 @@ function App() {
 
 
   }
-  const userSignup = (newUser) => {
-    console.log(newUser)
-    setUser({ ...user, ...newUser })
+  const aferSingUp =(newUser)=>{
+    setUser({...user,...newUser})
     console.log(user)
 
-
   }
+  const userSignup = (newUser) => {
+    var formdata = new FormData();
+    formdata.append("email", newUser.email);
+    formdata.append("password", newUser.password);
+    formdata.append("password2", newUser.password);
+    formdata.append("age", newUser.age);
+
+    var requestOptions = {
+      method: 'POST',
+      body: formdata,
+      headers:{'content-type':"application/json"},
+    };
+
+    axios({
+      method: 'post',
+      url: "http://127.0.0.1:8000/account/api/v1/signup",
+      headers: {}, 
+      data: formdata
+    }).then((res) =>
+      {
+        if(res.data.Authorization){
+          newUser.Authorization= res.data.Authorization
+          setUser({...user,...newUser})
+          if(user.Authorization){
+            window.location.href="/home"
+          }
+        }
+      })
+      .catch((err) => console.log(err));
+    
+  }
+  useEffect(()=>{
+
+    console.log(user)
+
+  },[user])
   const userLogout = () => {
 
   }
@@ -182,6 +218,7 @@ function App() {
     user.interested.push(...imageList)
     setUser({ interested: user.interested })
     console.log(user.interested)
+    getNewPins()
   }
   const gender = (item) => {
     user.gender=item
@@ -223,7 +260,7 @@ function App() {
   const getNewPins = (categry = "") => {
     let promises = [];
     let pinData = [];
-    let pins = [...user.interested];
+    let pins = user.interested;
     pins.push(categry)
     pins.forEach((pinTerm) => {
       promises.push(
@@ -295,15 +332,21 @@ function App() {
             <Mainboard pins={pins} onadd={boardviewHandler} />
             {/* <BoardView pins={newboard} /> */}
             <SignupPopup getimage={userInterest} gender={gender}/>
-          </Route>
-          <Route path='/signin'>
-            <Splash user={user} signIn={userLogin} signUp={userSignup} />
+          </Route> 
+          <Route exact path="/">
+
+            {user.Authorization ? <Redirect to="/home" /> : <> <Header onSumbit={onSearchSubmit} />
+            <Mainboard pins={pins} onadd={boardviewHandler} /></>}
+
           </Route>
           <Route path='/profile'>
             <Profile userData={user} boards={newboard} />
-            {/* <Popup /> */}
           </Route>
-          <Redirect path='/' to='/signin' />
+            
+          <Route path='/signin' render={props=><Splash user={user} signIn={userLogin} signUp={userSignup}{...props} />}/>
+            {/* <Popup /> */}
+        
+          <Redirect path='/' to='/home' />
           {/* <AddPin />  */}
           {/*<Model /> 
       <Modal_pin /> */}
