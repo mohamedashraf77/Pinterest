@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'pinterest_app',
     'rest_framework',
     'rest_framework.authtoken',
-    'account'
+    'account',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'pinterest.urls'
@@ -86,6 +88,7 @@ DATABASES = {
         'PASSWORD': 'mohamed',
         'HOST':'localhost',
         'PORT':'5432',
+
     }
 }
 
@@ -134,3 +137,4 @@ REST_FRAMEWORK = {'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework.authenticati
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
+CORS_ORIGIN_ALLOW_ALL = True

@@ -8,4 +8,5 @@ urlpatterns = [
   path('login', obtain_auth_token, name= 'api-login'),
   path('signup', views.signup, name= 'signup'),
   path('logout', views.logout, name= 'logout'),
+  path('gender', views.set_gender, name= 'gender'),
 ]

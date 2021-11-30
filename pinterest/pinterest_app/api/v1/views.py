@@ -2,9 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .Factory import PinterestFactory
-import tensorflow as tf
-import cv2
-import numpy as np
+from pinterest_app.models import pin_tags, Pin
 
 class Crud_ops:
     @api_view(["GET"])
@@ -31,27 +29,7 @@ class Crud_ops:
         if request.method == 'POST':
             serializer = model.get_serialzer(model= obj, data=request.data)
             if serializer.is_valid():
-                tf.keras.applications.InceptionV3(
-                    include_top=True,
-                    weights="imagenet",
-                    input_tensor=None,
-                    input_shape=None,
-                    pooling=None,
-                    classes=1000,
-                    classifier_activation="softmax",
-                )
                 serializer.save()
-                # content = request.data['url'].content()
-                # print(content)
-                # print(type(content))
-                # request.data['url'].seek(0)
-                # img_file = request.data['url'].read()
-                # print(img_file)
-                # print(type(img_file))
-                # npimg = np.fromfile(request.data['url'], np.uint8)
-                # img = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
-                # cv2.imshow('image', img)
-                # cv2.waitKey(0)
                 return Response(data={"message":"OK"}, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -86,6 +64,20 @@ class Crud_ops:
 @api_view(["GET"])
 def home(request):
     if request.user.is_authenticated:
-        pass
+        return Response(data={"message": "OK"}, status=status.HTTP_200_OK)
     else:
         return Response(data={"message": "not authenticated"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+def tags_list(request):
+    data = []
+    model = PinterestFactory("tags")
+    tags = pin_tags.objects.all()
+    for tag in tags:
+        img = {}
+        img['title'] = tag.tag
+        url = tag.pin.all().first().url.url
+        real_url = request.build_absolute_uri(url)
+        img['img'] = real_url
+        data.append(img)
+    return Response(data={'imgs':data}, status=status.HTTP_200_OK)

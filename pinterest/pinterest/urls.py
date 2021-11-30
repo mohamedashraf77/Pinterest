@@ -16,9 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 import pinterest_app
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pinterest_app/api/v1/', include('pinterest_app.api.v1.urls')),
     path('account/api/v1/', include('account.api.v1.urls')),
 ]
+
+if settings.DEBUG:
+ from django.conf.urls.static import static
+
+ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

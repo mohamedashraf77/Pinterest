@@ -1,0 +1,1 @@
+default_app_config = 'pinterest_app.apps.PinterestAppConfig'

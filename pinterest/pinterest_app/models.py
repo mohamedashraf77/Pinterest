@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+
+
 class Board(models.Model):
     description = models.TextField(null= True, blank= True)
     title = models.CharField(null= True, blank= True, max_length= 100 )
@@ -8,20 +10,21 @@ class Board(models.Model):
 
 class User(AbstractUser):
     username = None
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
+    first_name = models.CharField(max_length=150, null= True, blank= True)
+    last_name = models.CharField(max_length=150, null= True, blank= True)
     email = models.EmailField(max_length=150, unique=True)
     password = models.CharField(max_length=150)
-    phone = models.CharField(max_length=15)
+    phone = models.CharField(max_length=15, null= True, blank= True)
     avatar = models.ImageField(upload_to= 'pinterest_app/user_avatar', null= True, blank= True)
     age = models.IntegerField()
-    gender = models.CharField(max_length= 10, choices= [('female', 'female'), ('male', 'male')])
+    gender = models.CharField(max_length= 10, choices= [('female', 'female'), ('male', 'male')], null= True, blank= True)
     followers = models.ManyToManyField(
         to='self',
         related_name='followees',
         symmetrical=False
     )
     friends = models.ManyToManyField('User', blank= True)
+    tags = models.ManyToManyField('pin_tags', blank=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -32,10 +35,11 @@ class Pin(models.Model):
     description = models.TextField(null=True, blank=True)
     destination_link = models.URLField(null=True, blank=True)
     type = models.CharField(max_length=10, choices= [('image', 'image'), ('video', 'video')], default= 'image')
-    url = models.ImageField(upload_to= 'pinterest_app/Pin', max_length=200)
+    url = models.ImageField(upload_to= 'pinterest_app/Pin')
     boards = models.ManyToManyField(Board, blank=True)
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     likes = models.IntegerField(blank=True, null=True)
+
 
 class Saved_pins(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE)
@@ -68,5 +72,4 @@ class Notification(models.Model):
 
 class pin_tags(models.Model):
     pin = models.ManyToManyField(Pin, blank=True)
-    tag = models.CharField(max_length= 100 )
-    user = models.ManyToManyField(User, blank=True)
+    tag = models.CharField(max_length= 100, unique=True)
