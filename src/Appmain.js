@@ -219,6 +219,7 @@ function App() {
 
     console.log(user)
     if(user.Authorization){
+      localStorage.setItem("user", JSON.stringify(user))
       window.location.href="/home"
     }
   },[user])
@@ -238,13 +239,32 @@ function App() {
   const userInterest = (imageList) => {
     console.log(imageList)
     user.interested.push(...imageList)
-    setUser({ interested: user.interested })
+    setUser({ ...user })
     console.log(user.interested)
     getNewPins()
   }
   const gender = (item) => {
+    let user = JSON.parse(localStorage.getItem("user"))
+
     user.gender = item
-    setUser({ gender: user.gender })
+    // setUser({...user,gender: user.gender })
+    var formdata = new FormData();
+    formdata.append("gender", user.gender);
+    axios({
+      method: 'post',
+      url: "http://127.0.0.1:8000/account/api/v1/gender",
+      headers:{'Authorization':user.Authorization}, 
+      data: formdata
+    }).then((res) =>
+      {
+        if(res.data.message == "done"){
+          console.log("done")
+        }
+      })
+      .catch((err) => console.log(err));
+    //setUser({ gender: user.gender })
+    localStorage.setItem("user", JSON.stringify(user))
+    console.log(user)
   }
 
   //Notfications Function

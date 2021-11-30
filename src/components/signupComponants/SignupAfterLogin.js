@@ -110,6 +110,8 @@ class SignupAfterLogin extends React.Component {
     listInterest=(item)=>{
       this.state.listInterest.push(item)
       this.setState({listInterest:this.state.listInterest})
+      
+
       // console.log(this.state.listInterest)
     }
     genderFromPopup=(gender)=>{
@@ -127,6 +129,16 @@ class SignupAfterLogin extends React.Component {
     }
     this.props.getimage(this.state.listInterest)
     this.props.gender(this.state.gender)
+    
+
+    setTimeout(
+      function() {
+        this.props.handleClose();;
+      }
+      .bind(this),
+      3000
+  );
+
     
     //  this.props.getimage()
   };

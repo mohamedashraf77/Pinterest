@@ -33,6 +33,7 @@ export default class SignupPopup extends React.Component {
     }
     handleClose = () => {
         this.setState({ open: false });
+
     }
     componentDidMount=()=> {
         // if (this.props.user.gender){
@@ -43,9 +44,6 @@ export default class SignupPopup extends React.Component {
         
 
     }
-    //   const [open, setOpen] = React.useState(false);
-    //   const handleOpen = () => setOpen(true);
-    //   const handleClose = () => setOpen(false);
     render() {
         return <div>
 
@@ -54,7 +52,7 @@ export default class SignupPopup extends React.Component {
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 open={this.state.open}
-                onClose={this.handleClose}
+                // onClose={this.handleClose}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
                 BackdropProps={{
@@ -63,7 +61,7 @@ export default class SignupPopup extends React.Component {
             >
                 <Fade in={this.state.open}>
                     <Box sx={style}>
-                        <SignupAfterLogin getimage={this.props.getimage} gender={this.props.gender}/>
+                        <SignupAfterLogin getimage={this.props.getimage} gender={this.props.gender} handleClose={this.handleClose}/>
                     </Box>
                 </Fade>
             </Modal>

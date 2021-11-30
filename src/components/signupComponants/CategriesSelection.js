@@ -1,10 +1,12 @@
-import * as React from "react";
+import React, { useState, useEffect  } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import IconButton from "@mui/material/IconButton";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import axios from "axios";
+
 
 function srcset(image, width, height, rows = 1, cols = 1) {
   return {
@@ -16,21 +18,48 @@ function srcset(image, width, height, rows = 1, cols = 1) {
 }
 
 export default function CategriesSelection({listInterest}) {
-  
+  let filterItem=[...itemData];
+  itemData=filterItem
   const onclick =  (x)=>{
-    // categry.push(x)
-    console.log(x)
     listInterest(x)
-    
+     filterItem = itemData.filter((item)=>item.title !== x)
+     itemData=filterItem
+    console.log(filterItem)
+    return filterItem
   }
-  // getimage(categry)
+  
+
+  const tag_list= ()=>{
+    let user = JSON.parse(localStorage.getItem("user"))
+    var formdata = new FormData();
+    axios({
+      method: 'GET',
+      url: "http://127.0.0.1:8000/pinterest_app/api/v1/tags",
+      headers:{'Authorization':user.Authorization},
+    }).then((res) =>
+      {
+        console.log(res.data.imgs)
+        for(var i = 0; i< res.data.imgs.length; i++)
+        {
+            console.log(res.data.imgs[i])
+            itemData.push(res.data.imgs[i])
+        }
+        console.log(itemData)
+      })
+      .catch((err) => console.log(err));
+  }
+
+  useEffect(()=>{
+   
+
+    tag_list()
+  },[])
 
   return (
     <ImageList
       sx={{
         width: 600,
         height: 300,
-        // Promote the list into its own layer in Chrome. This costs memory, but helps keeping high FPS.
         transform: "translateZ(0)",
         
       }}
@@ -76,7 +105,7 @@ export default function CategriesSelection({listInterest}) {
   );
 }
 
-const itemData = [
+let itemData = [
   {
     img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
     title: "Breakfast",
