@@ -3,16 +3,21 @@ import { Box, Container, Typography, Grid, Button, Divider, List, ListItem, Icon
 import Pin from './Pin';
 
 export default class BoardView extends Component {
-    constructor() {
-        super();
-        this.state = {title: "Alex",pin:[]}
-
-
+    constructor(props) {
+        
+        super(props);
+        let item = this.props.board.filter(board => board.id == this.props.match.params.id)[0]
+        this.state = {
+            board:item
+        }
     }
+ 
+
     refresh=(props)=>{
-        console.log(this.props.pins)
-        this.state.pin.push(...this.props.pins)
-        this.setState({pin:this.state.pin})
+        console.log(this.state.board.pins.length)
+        // console.log(this.props.location.history)
+        // this.state.pin.push(...this.props.pins)
+        // this.setState({pin:this.state.pin})
     }
     
  savePin =(item)=>{
@@ -42,7 +47,7 @@ export default class BoardView extends Component {
 
 
                     <Typography component="h1" variant="h5" sx={{ fontSize: 35, color: 'black', fontWeight: "bold" }}>
-                        {this.state.title}
+                        {this.state.board.title}
                     </Typography>
 
                     <Button
@@ -58,13 +63,13 @@ export default class BoardView extends Component {
 
                     <Container>
                         <Typography component="h1" variant="h5" sx={{ fontSize: 20, color: 'black' }}>
-                            {this.state.pin.length} Pins
+                            {this.state.board.pins.length} Pins
                         </Typography>
                         <Divider variant="middle" sx={{ margin: 3 }} />
                     </Container>
                     <Container>
-                        {this.state.pin.map(pin=>(
-                            <Pin discUrl={pin.discUrl} urls={pin.img} savePin={this.savePin}/>
+                        {this.state.board.pins.map(pin=>(
+                            <Pin discUrl={pin.img} urls={pin.img} savePin={this.savePin}/>
                         ))}
                     </Container>
 

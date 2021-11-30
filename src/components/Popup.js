@@ -76,31 +76,35 @@ class Popup extends React.Component {
 
     addBoard = () => {
         let board = {
-            name: this.state.text,
-            images: [{
-                img: "https://lh3.googleusercontent.com/proxy/JrFz9msZPb5Z410NsSdw3aWxIBCxtcQny3lcffC5Xwn7wMr_ItasVE0gZyo41Flwb6SbsyuuZopPLjR7EU31qRjOejaJGgPh9FecQM5zKulVdJtRBjfz",
+            id: "5",
+            title: this.state.text,
+            pins: [{
+                id: "",
+                img: "https://image.shutterstock.com/z/stock-photo-business-accelerator-program-providing-a-launch-pad-for-companies-d-illustration-render-539542939.jpg",
                 cols: 2,
                 rows: 2
             },
             {
-                img: "https://lh3.googleusercontent.com/proxy/JrFz9msZPb5Z410NsSdw3aWxIBCxtcQny3lcffC5Xwn7wMr_ItasVE0gZyo41Flwb6SbsyuuZopPLjR7EU31qRjOejaJGgPh9FecQM5zKulVdJtRBjfz",
+                id: "",
+                img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-shaving-effect-657743737.jpg",
             },
             {
-                img: "https://lh3.googleusercontent.com/proxy/JrFz9msZPb5Z410NsSdw3aWxIBCxtcQny3lcffC5Xwn7wMr_ItasVE0gZyo41Flwb6SbsyuuZopPLjR7EU31qRjOejaJGgPh9FecQM5zKulVdJtRBjfz",
+                id: "",
+                img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-199485986.jpg",
             }],
-            pin: 0,
-            time: "1s"
+            pin: 5,
+            time: "2w"
         }
         // alert(this.state.text)
         this.props.addBoardfromPopup(board)
         this.handleClose()
     }
-    setText=(e)=>{
-        this.setState({text:e.target.value})
-        
+    setText = (e) => {
+        this.setState({ text: e.target.value })
+
     }
 
-  
+
     render() {
         const { classes } = this.props;
         return <div>

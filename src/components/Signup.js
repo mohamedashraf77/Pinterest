@@ -180,6 +180,7 @@ render(){
                     fullWidth
                     variant="contained"
                     sx={{ mt: 3, mb: 2, borderRadius: 30, bgcolor: "red", ":hover": { bgcolor: "darkred" } }}
+
                     onClick={this.registration}
                     //  type="submit" 
                 >

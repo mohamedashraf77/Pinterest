@@ -1,4 +1,3 @@
-
 import Splash from "./components/Splash";
 import SignIn from "./components/Signin";
 import SignUp from "./components/Signup";
@@ -8,7 +7,7 @@ import Header from './components/Header';
 import Mainboard from './components/Mainboard';
 import unsplash from './api/unsplash';
 import AddPin from './components/AddPin';
-import { BrowserRouter as Router, Route,useHistory, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect, useHistory } from "react-router-dom";
 import SignupPopup from './components/signupComponants/SignupPopup'
 import CategriesSelection from './components/signupComponants/CategriesSelection'
 import Profile from "./components/ProfilePage";
@@ -25,7 +24,6 @@ import { withRouter } from "react-router-dom";
 
 
 function App() {
-  //let history = useHistory();
   const [pins, setNewPins] = useState([]);
   const [allpins, setAllpins] = useState([{
     id: "1",
@@ -51,7 +49,28 @@ function App() {
   const [newboard, setNewBoard] = useState(
     [{
       id: "1",
-      title: "alexandria",
+      title: "All Pins",
+      pins: [{
+        id: "",
+        img: "https://image.shutterstock.com/z/stock-photo-business-accelerator-program-providing-a-launch-pad-for-companies-d-illustration-render-539542939.jpg",
+        cols: 2,
+        rows: 2
+      },
+      {
+        id: "",
+        img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-shaving-effect-657743737.jpg",
+      },
+      {
+        id: "",
+        img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-199485986.jpg",
+      }],
+      pin: 5,
+      time: "2w"
+
+
+    }, {
+      id: "2",
+      title: "cat",
       pins: [{
         id: "",
         img: "https://image.shutterstock.com/z/stock-photo-business-accelerator-program-providing-a-launch-pad-for-companies-d-illustration-render-539542939.jpg",
@@ -117,20 +136,25 @@ function App() {
 
 
   }
-  const savePin = () => {
+  const savePin = (item) => {
+    console.log(item)
 
 
   }
 
+
   //boards Functions
 
-  const createBoard = () => {
-
+  const createBoard = (item) => {
+    setNewBoard([...newboard, item])
   }
   const editBoard = () => {
 
   }
-  const DeleteBoard = () => {
+  const deleteBoard = (id) => {
+    console.log(id)
+    setNewBoard(newboard.filter(pin => pin.id !== id))
+
 
   }
 
@@ -151,17 +175,16 @@ function App() {
           setUser({ ...userLogin })
           console.log(user)
 
+          return <Redirect to="/home" />
+
+
+
         } else {
           alert(obj.error)
         }
 
       })
 
-
-  }
-  const aferSingUp =(newUser)=>{
-    setUser({...user,...newUser})
-    console.log(user)
 
   }
   const userSignup = (newUser) => {
@@ -187,9 +210,6 @@ function App() {
         if(res.data.Authorization){
           newUser.Authorization= res.data.Authorization
           setUser({...user,...newUser})
-          if(user.Authorization){
-            window.location.href="/home"
-          }
         }
       })
       .catch((err) => console.log(err));
@@ -198,7 +218,9 @@ function App() {
   useEffect(()=>{
 
     console.log(user)
-
+    if(user.Authorization){
+      window.location.href="/home"
+    }
   },[user])
   const userLogout = () => {
 
@@ -221,8 +243,8 @@ function App() {
     getNewPins()
   }
   const gender = (item) => {
-    user.gender=item
-    setUser({gender:user.gender})
+    user.gender = item
+    setUser({ gender: user.gender })
   }
 
   //Notfications Function
@@ -260,8 +282,9 @@ function App() {
   const getNewPins = (categry = "") => {
     let promises = [];
     let pinData = [];
-    let pins = user.interested;
-    pins.push(categry)
+
+    let pins = [...user.interested];
+    // pins.push(categry)
     pins.forEach((pinTerm) => {
       promises.push(
         getImage(pinTerm).then((res) => {
@@ -294,6 +317,7 @@ function App() {
     <Router>
       <div className="app">
         <Switch>
+          
           <Route path='/edit/:id' render={(props) =>
             <>
               <Header onSumbit={onSearchSubmit} />
@@ -311,9 +335,11 @@ function App() {
           }>
             {/* <Details  /> */}
           </Route>
-          <Route path="/boardview">
-            <Header />
-            <BoardView pins={newboard} />
+          <Route path="/boardview/:id" render={(props) =>
+            <>
+              <Header />
+              <BoardView board={newboard} {...props} />
+            </>}>
           </Route>
           <Route path="/setting" >
             <Header />
@@ -323,7 +349,7 @@ function App() {
             <Header onSumbit={onSearchSubmit} />
             <AddPin createPin={createPin} boards={newboard} userID={user.id} />
             {allpins.map(pin => (
-              <Pin urls={pin.img} discUrl={pin.discUrl} deletePin={deletePin} key={pin.id} pinId={pin.id} onEdit={editPin} />
+              <Pin urls={pin.img} discUrl={pin.discUrl} deletePin={deletePin} key={pin.id} pinId={pin.id} onEdit={editPin} savePin={savePin} />
             ))}
 
           </Route>
@@ -333,12 +359,11 @@ function App() {
             {/* <BoardView pins={newboard} /> */}
             <SignupPopup getimage={userInterest} gender={gender}/>
           </Route> 
-          <Route exact path="/">
-
+          {/* <Route exact path="/">
             {user.Authorization ? <Redirect to="/home" /> : <> <Header onSumbit={onSearchSubmit} />
             <Mainboard pins={pins} onadd={boardviewHandler} /></>}
 
-          </Route>
+          </Route> */}
           <Route path='/profile'>
             <Profile userData={user} boards={newboard} />
           </Route>
@@ -346,7 +371,7 @@ function App() {
           <Route path='/signin' render={props=><Splash user={user} signIn={userLogin} signUp={userSignup}{...props} />}/>
             {/* <Popup /> */}
         
-          <Redirect path='/' to='/home' />
+          <Redirect path='/' to='/signin' />
           {/* <AddPin />  */}
           {/*<Model /> 
       <Modal_pin /> */}
