@@ -1,4 +1,3 @@
-
 import Splash from "./components/Splash";
 import SignIn from "./components/Signin";
 import SignUp from "./components/Signup";
@@ -49,7 +48,28 @@ function App() {
   const [newboard, setNewBoard] = useState(
     [{
       id: "1",
-      title: "alexandria",
+      title: "All Pins",
+      pins: [{
+        id: "",
+        img: "https://image.shutterstock.com/z/stock-photo-business-accelerator-program-providing-a-launch-pad-for-companies-d-illustration-render-539542939.jpg",
+        cols: 2,
+        rows: 2
+      },
+      {
+        id: "",
+        img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-shaving-effect-657743737.jpg",
+      },
+      {
+        id: "",
+        img: "https://image.shutterstock.com/z/stock-photo-race-horses-with-jockeys-on-the-home-straight-199485986.jpg",
+      }],
+      pin: 5,
+      time: "2w"
+
+
+    }, {
+      id: "2",
+      title: "cat",
       pins: [{
         id: "",
         img: "https://image.shutterstock.com/z/stock-photo-business-accelerator-program-providing-a-launch-pad-for-companies-d-illustration-render-539542939.jpg",
@@ -115,20 +135,25 @@ function App() {
 
 
   }
-  const savePin = () => {
+  const savePin = (item) => {
+    console.log(item)
 
 
   }
 
+
   //boards Functions
 
-  const createBoard = () => {
-
+  const createBoard = (item) => {
+    setNewBoard([...newboard,item])
   }
   const editBoard = () => {
 
   }
-  const DeleteBoard = () => {
+  const deleteBoard = (id) => {
+    console.log(id)
+    setNewBoard(newboard.filter(pin => pin.id !== id))
+
 
   }
 
@@ -184,8 +209,8 @@ function App() {
     console.log(user.interested)
   }
   const gender = (item) => {
-    user.gender=item
-    setUser({gender:user.gender})
+    user.gender = item
+    setUser({ gender: user.gender })
   }
 
   //Notfications Function
@@ -274,9 +299,11 @@ function App() {
           }>
             {/* <Details  /> */}
           </Route>
-          <Route path="/boardview">
+          <Route path="/boardview/:id" render={(props) =>
+          <>
             <Header />
-            <BoardView pins={newboard} />
+            <BoardView board={newboard} {...props} />
+            </> }>
           </Route>
           <Route path="/setting" >
             <Header />
@@ -286,7 +313,7 @@ function App() {
             <Header onSumbit={onSearchSubmit} />
             <AddPin createPin={createPin} boards={newboard} userID={user.id} />
             {allpins.map(pin => (
-              <Pin urls={pin.img} discUrl={pin.discUrl} deletePin={deletePin} key={pin.id} pinId={pin.id} onEdit={editPin} />
+              <Pin urls={pin.img} discUrl={pin.discUrl} deletePin={deletePin} key={pin.id} pinId={pin.id} onEdit={editPin} savePin={savePin}/>
             ))}
 
           </Route>
@@ -294,13 +321,13 @@ function App() {
             <Header onSumbit={onSearchSubmit} />
             <Mainboard pins={pins} onadd={boardviewHandler} />
             {/* <BoardView pins={newboard} /> */}
-            <SignupPopup getimage={userInterest} gender={gender}/>
+            <SignupPopup getimage={userInterest} gender={gender} user={user}/>
           </Route>
           <Route path='/signin'>
             <Splash user={user} signIn={userLogin} signUp={userSignup} />
           </Route>
           <Route path='/profile'>
-            <Profile userData={user} boards={newboard} />
+            <Profile userData={user} boards={newboard} createBoard={createBoard} deleteBoard={deleteBoard}/>
             {/* <Popup /> */}
           </Route>
           <Redirect path='/' to='/signin' />

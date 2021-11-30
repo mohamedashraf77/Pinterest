@@ -12,14 +12,13 @@ function Pin({urls,discUrl,savePin,deletePin,pinId,onEdit}) {
     // console.log(imgurl.slice(0,11))
 
     // let { urls } = props
-    const addHandler=(urls,discUrl)=>{
-        let item ={
-                id:"",
-                name: "ai 7aga",
+    const addHandler=(urls,discUrl,pinId)=>{
+        let image ={
+                id:pinId,
                 img:urls,
                 discUrl: discUrl,
             }
-            savePin(item)
+            savePin(image)
     }
     
     
@@ -30,7 +29,7 @@ function Pin({urls,discUrl,savePin,deletePin,pinId,onEdit}) {
                     {/* <div className="pin_title">{props.pinDetails.title}</div> */}
                     <div className="pin_modal">
                         {/* <div className="modal_head"> */}
-                            <Button variant="contained" color='error' onClick={()=>(addHandler(urls,discUrl))} className="save_card" size="small">Save</Button>
+                            <Button variant="contained" color='error' onClick={()=>(addHandler(urls,discUrl,pinId))} className="save_card" size="small">Save</Button>
                         {/* </div> */}
                         <div className="modal_foot">
                         <a href={imgurl}>

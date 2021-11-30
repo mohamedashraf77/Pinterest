@@ -34,8 +34,12 @@ export default class SignupPopup extends React.Component {
     handleClose = () => {
         this.setState({ open: false });
     }
-    componentDidMount() {
+    componentDidMount=()=> {
+        if (this.props.user.gender){
+            return ;
+        }
         this.handleOpen()
+        
         
 
     }
