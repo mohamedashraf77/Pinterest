@@ -7,7 +7,7 @@ import Header from './components/Header';
 import Mainboard from './components/Mainboard';
 import unsplash from './api/unsplash';
 import AddPin from './components/AddPin';
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect, useHistory } from "react-router-dom";
 import SignupPopup from './components/signupComponants/SignupPopup'
 import CategriesSelection from './components/signupComponants/CategriesSelection'
 import Profile from "./components/ProfilePage";
@@ -22,6 +22,7 @@ import EditPin from './components/EditPin';
 
 
 function App() {
+  let history = useHistory()
 
   const [pins, setNewPins] = useState([]);
   const [allpins, setAllpins] = useState([{
@@ -99,10 +100,10 @@ function App() {
     password: "",
     passwordValid: true,
     age: 0,
-    gender: "male",
+    gender: "",
     language: "",
     country: "",
-    interested: ["sport", "car", "camera", "food", "watch"],
+    interested: [],
     token: "",
     pins: [],
     boards: [],
@@ -145,7 +146,7 @@ function App() {
   //boards Functions
 
   const createBoard = (item) => {
-    setNewBoard([...newboard,item])
+    setNewBoard([...newboard, item])
   }
   const editBoard = () => {
 
@@ -174,6 +175,10 @@ function App() {
           setUser({ ...userLogin })
           console.log(user)
 
+          return <Redirect to="/home" />
+
+
+
         } else {
           alert(obj.error)
         }
@@ -182,13 +187,18 @@ function App() {
 
 
   }
+
+
+
   const userSignup = (newUser) => {
     console.log(newUser)
+
     setUser({ ...user, ...newUser })
-    console.log(user)
-
-
   }
+  useEffect(() => {
+    console.log(user)
+  }, [user])
+
   const userLogout = () => {
 
   }
@@ -207,6 +217,7 @@ function App() {
     user.interested.push(...imageList)
     setUser({ interested: user.interested })
     console.log(user.interested)
+    getNewPins()
   }
   const gender = (item) => {
     user.gender = item
@@ -249,7 +260,7 @@ function App() {
     let promises = [];
     let pinData = [];
     let pins = [...user.interested];
-    pins.push(categry)
+    // pins.push(categry)
     pins.forEach((pinTerm) => {
       promises.push(
         getImage(pinTerm).then((res) => {
@@ -282,6 +293,7 @@ function App() {
     <Router>
       <div className="app">
         <Switch>
+          
           <Route path='/edit/:id' render={(props) =>
             <>
               <Header onSumbit={onSearchSubmit} />
@@ -300,10 +312,10 @@ function App() {
             {/* <Details  /> */}
           </Route>
           <Route path="/boardview/:id" render={(props) =>
-          <>
-            <Header />
-            <BoardView board={newboard} {...props} />
-            </> }>
+            <>
+              <Header />
+              <BoardView board={newboard} {...props} />
+            </>}>
           </Route>
           <Route path="/setting" >
             <Header />
@@ -313,7 +325,7 @@ function App() {
             <Header onSumbit={onSearchSubmit} />
             <AddPin createPin={createPin} boards={newboard} userID={user.id} />
             {allpins.map(pin => (
-              <Pin urls={pin.img} discUrl={pin.discUrl} deletePin={deletePin} key={pin.id} pinId={pin.id} onEdit={editPin} savePin={savePin}/>
+              <Pin urls={pin.img} discUrl={pin.discUrl} deletePin={deletePin} key={pin.id} pinId={pin.id} onEdit={editPin} savePin={savePin} />
             ))}
 
           </Route>
@@ -321,13 +333,13 @@ function App() {
             <Header onSumbit={onSearchSubmit} />
             <Mainboard pins={pins} onadd={boardviewHandler} />
             {/* <BoardView pins={newboard} /> */}
-            <SignupPopup getimage={userInterest} gender={gender} user={user}/>
+            <SignupPopup getimage={userInterest} gender={gender} user={user} />
           </Route>
           <Route path='/signin'>
             <Splash user={user} signIn={userLogin} signUp={userSignup} />
           </Route>
           <Route path='/profile'>
-            <Profile userData={user} boards={newboard} createBoard={createBoard} deleteBoard={deleteBoard}/>
+            <Profile userData={user} boards={newboard} createBoard={createBoard} deleteBoard={deleteBoard} />
             {/* <Popup /> */}
           </Route>
           <Redirect path='/' to='/signin' />

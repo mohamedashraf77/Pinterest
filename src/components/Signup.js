@@ -123,7 +123,7 @@ render(){
             <Typography variant="body1" sx={{ fontSize: 18, color: 'gray' }}>
                 Find new ideas to try
             </Typography>
-            <Box component="form"  noValidate sx={{ mt: 1, padding: 5 }} >
+            <Box component="form" onSubmit={this.registration} noValidate sx={{ mt: 1, padding: 5 }} >
 
                 <TextField
                     // error
@@ -178,8 +178,8 @@ render(){
                     fullWidth
                     variant="contained"
                     sx={{ mt: 3, mb: 2, borderRadius: 30, bgcolor: "red", ":hover": { bgcolor: "darkred" } }}
-                    onClick={this.registration}
-                    // type="submit" 
+                    
+                    type="submit" 
                 >
                     Continue
                 </Button>
