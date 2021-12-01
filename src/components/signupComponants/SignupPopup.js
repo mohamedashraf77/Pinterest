@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import SignupAfterLogin from './SignupAfterLogin';
+import axios from "axios";
 
 
 const style = {
@@ -36,10 +37,21 @@ export default class SignupPopup extends React.Component {
 
     }
     componentDidMount=()=> {
-        // if (this.props.user.gender){
-        //     return ;
-        // }
-        this.handleOpen()
+        const http_url = "http://localhost:8000/"
+        let user = JSON.parse(localStorage.getItem("user"))
+        console.log(user)
+        axios({
+            method: 'GET',
+            url: (http_url+"account/api/v1/home"),
+            headers: {'Authorization':user.Authorization},
+          }).then((res) =>
+            {
+              if(res.data.message == "none"){
+                this.handleOpen()
+              }
+            })
+            .catch((err) => console.log(err));
+            
         
         
 

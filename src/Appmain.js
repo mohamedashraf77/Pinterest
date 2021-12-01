@@ -24,6 +24,7 @@ import { withRouter } from "react-router-dom";
 
 
 function App() {
+  const http_url = "http://localhost:8000/"
   const [pins, setNewPins] = useState([]);
   const [allpins, setAllpins] = useState([{
     id: "1",
@@ -161,32 +162,33 @@ function App() {
   //users Functions
 
   const userLogin = (userLogin) => {
+    localStorage.clear();
+    console.log(userLogin)
 
-    fetch("https://reqres.in/api/login", {
-      method: "POST",
-      headers: {
-        'content-type': "application/json"
-      },
-      body: JSON.stringify(userLogin)
-    }).then(res => res.json())
-      .then(obj => {
-        if (obj.token) {
-          alert("login success")
-          setUser({ ...userLogin })
-          console.log(user)
+    var formdata = new FormData();
+    formdata.append("username", userLogin.email);
+    formdata.append("password", userLogin.password);
 
-          return <Redirect to="/home" />
-
-
-
-        } else {
-          alert(obj.error)
+    axios({
+      method: 'post',
+      url: (http_url+"account/api/v1/login"), 
+      data: formdata
+    }).then((res) =>
+      {
+        if(res.data.token){
+          setUser({...user,Authorization:res.data.token})
         }
-
       })
-
+      .catch((err) => console.log(err));
 
   }
+  useEffect(()=>{
+    if(user.Authorization){
+      console.log(user)
+      localStorage.setItem("user", JSON.stringify(user))
+      return <Redirect to="/home" />
+    }
+  },[user])
   const userSignup = (newUser) => {
     var formdata = new FormData();
     formdata.append("email", newUser.email);
@@ -238,9 +240,27 @@ function App() {
   }
   const userInterest = (imageList) => {
     console.log(imageList)
+    // setUser({ ...user })
+    let user = JSON.parse(localStorage.getItem("user"))
     user.interested.push(...imageList)
-    setUser({ ...user })
     console.log(user.interested)
+
+    var formdata = new FormData();
+    formdata.append("tags", imageList);
+
+    axios({
+      method: 'post',
+      url: (http_url+"account/api/v1/tags"),
+      headers: {'Authorization':user.Authorization}, 
+      data: formdata
+    }).then((res) =>
+      {
+        if(res.data.message){
+          console.log(res.data.message)
+        }
+      })
+      .catch((err) => console.log(err));
+
     getNewPins()
   }
   const gender = (item) => {
