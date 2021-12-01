@@ -5,7 +5,7 @@ from .serializers import UserSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from pinterest_app.models import User
+from pinterest_app.models import User, pin_tags
 
 @api_view(['POST'])
 def signup(request):
@@ -41,3 +41,28 @@ def set_gender(request):
         return Response(data={"message": "done"}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(data={"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def set_tags(request):
+    try:
+        print(request.data)
+        user = request.user
+        tags = request.data['tags']
+        tags_list = tags.split(',')
+        for tag in tags_list:
+            print(tag)
+            t = pin_tags.objects.get(tag=tag)
+            user.tags.add(t)
+        return Response(data={"message": "done"}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response(data={"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def login_check(request):
+    print(request.user.gender)
+    if request.user.gender:
+        return Response(data={"message": "done"}, status=status.HTTP_200_OK)
+    else:
+        return Response(data={"message": "none"}, status=status.HTTP_200_OK)

@@ -64,6 +64,13 @@ class Crud_ops:
 @api_view(["GET"])
 def home(request):
     if request.user.is_authenticated:
+        pins_list = []
+        tags = request.user.tags.objects.all()
+        for tag in tags:
+            pins = tag.pin
+#            for pin in pins:
+
+
         return Response(data={"message": "OK"}, status=status.HTTP_200_OK)
     else:
         return Response(data={"message": "not authenticated"}, status=status.HTTP_400_BAD_REQUEST)
