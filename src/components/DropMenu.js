@@ -15,7 +15,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Profile from './ProfilePage';
 
 
-export default function AccountMenu() {
+export default function AccountMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -26,8 +26,10 @@ export default function AccountMenu() {
   };
 
   const logout =() => {
-    window.location.href = '/';
+    // window.location.href = '/';
+    props.userLogout()
     handleClose()
+    
   }
   const setting =()=>{
     window.location.href = '/setting';

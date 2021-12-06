@@ -131,7 +131,7 @@ render(){
                 <TextField
                     // error
                     margin="normal"
-                    // required
+                    required
                     fullWidth
                     id="password"
                     label="old-Password"
@@ -149,7 +149,7 @@ render(){
             <TextField
                     // error
                     margin="normal"
-                    // required
+                    required
                     fullWidth
                     id="password"
                     label="new-Password"

@@ -14,11 +14,15 @@ function upload_img(
     if (event.target.files && event.target.files[0]) {
         if (/image\/*/.test(event.target.files[0].type)) {
             const reader = new FileReader();
+            const file = event.target.files[0]
 
             reader.onload = function () {
+                console.log("ali")
+                console.log(file)
                 setPinDetails({
                     ...pinDetails,
-                    img: reader.result
+                    img: reader.result,
+                    file: file
                 });
                 setShowLabel(false);
                 setShowModalPin(true);
@@ -73,6 +77,7 @@ function AddPin(props) {
         tags: [],
         description: "",
         userId:"",
+        file:null
     })
     const [showLabel, setShowLabel] = useState(true);
     const [showModalPin, setShowModalPin] = useState(false);

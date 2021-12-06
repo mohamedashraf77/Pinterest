@@ -20,6 +20,7 @@ import { Avatar } from '@mui/material/Avatar';
 import EditPin from './components/EditPin';
 import axios from "axios";
 import { withRouter } from "react-router-dom";
+import { WindowSharp } from "@mui/icons-material";
 
 
 
@@ -117,9 +118,29 @@ function App() {
 
   //pin Functions
   const createPin = (pinItem) => {
-    // console.log(pinItem)
+    let user = JSON.parse(localStorage.getItem("user")) 
     setAllpins([...allpins, pinItem])
-    // console.log(allpins)
+    
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", user.Authorization);
+    console.log(pinItem)
+    var formdata = new FormData();
+    formdata.append("title", pinItem.name);
+    formdata.append("url", pinItem.file, pinItem.file.name);
+    formdata.append("board_name", pinItem.board);
+    formdata.append("description", pinItem.description);
+    formdata.append("destination_link", pinItem.discUrl);
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow'
+    };
+
+    fetch((http_url+"pinterest_app/api/v1/crud/create/pin"), requestOptions)
+      .then(response => response.text())
+      .then(result => window.location.href="/home")
+      .catch(error => console.log('error', error));
 
   }
   const deletePin = (id) => {
@@ -143,21 +164,53 @@ function App() {
 
   }
 
+  const getBoards = ()=>{
+
+    let user = JSON.parse(localStorage.getItem("user"))
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", user.Authorization);
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+
+    fetch((http_url+"pinterest_app/api/v1/crud/create/pin"), requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+
+  }
+  useEffect(()=>{
+   
+    
+  },[])
 
   //boards Functions
 
   const createBoard = (item) => {
-    setNewBoard([...newboard, item])
+    let user = JSON.parse(localStorage.getItem("user"))
+    var formdata = new FormData();
+    formdata.append("title", item.title);
+    axios({
+      method: 'post',
+      url: "http://127.0.0.1:8000/pinterest_app/api/v1/crud/create/board",
+      headers:{'Authorization':user.Authorization},
+      data: formdata
+    }).then((res) =>
+      {
+        console.log(res.data)
+        if(res.data){
+          setNewBoard([...newboard, item])
+        }
+      })
+      .catch((err) => console.log(err));
   }
+
   const editBoard = () => {
 
   }
-  const deleteBoard = (id) => {
-    console.log(id)
-    setNewBoard(newboard.filter(pin => pin.id !== id))
-
-
-  }
+  
 
   //users Functions
 
@@ -176,7 +229,8 @@ function App() {
     }).then((res) =>
       {
         if(res.data.token){
-          setUser({...user,Authorization:res.data.token})
+          let token = "Token "+res.data.token
+          setUser({...user,Authorization: token})
         }
       })
       .catch((err) => console.log(err));
@@ -225,8 +279,21 @@ function App() {
       window.location.href="/home"
     }
   },[user])
+  
   const userLogout = () => {
-
+    let user = JSON.parse(localStorage.getItem("user"))
+    axios({
+      method: 'post',
+      url: (http_url+"account/api/v1/logout"),
+      headers:{'Authorization':user.Authorization},
+    }).then((res) =>
+      {
+        if(res.data.message){
+          localStorage.clear();
+          window.location.href="/signin"
+        }
+      })
+      .catch((err) => console.log(err));
   }
   const userFollowing = () => {
 
@@ -257,11 +324,12 @@ function App() {
       {
         if(res.data.message){
           console.log(res.data.message)
+          getNewPins()
         }
       })
       .catch((err) => console.log(err));
 
-    getNewPins()
+    
   }
   const gender = (item) => {
     let user = JSON.parse(localStorage.getItem("user"))
@@ -302,16 +370,35 @@ function App() {
   };
 
   const onSearchSubmit = (term) => {
+
     // console.log(term);
+
     getImage(term).then((res) => {
+
       let results = res.data.results;
-      let newPins = [...results, ...pins];
-      newPins.sort(function (a, b) {
-        return 0.5 - Math.random();
-      }); //for minimize the number of photo
-      setNewPins(newPins); //add the new value in pins
-      console.log(newPins)
+      let sePin = []
+      results.forEach(item =>{
+        let temPin = {url :item.urls.regular,
+          discUrl:item.urls.regular}
+        sePin.push(temPin)
+        
+      })
+
+      // let newPins = [...results, ...pins];
+
+      // newPins.sort(function (a, b) {
+
+      //   return 0.5 - Math.random();
+
+      // }); //for minimize the number of photo
+
+      // setNewPins(newPins); //add the new value in pins
+
+      console.log(sePin)
+      setNewPins([...sePin])
+
     });
+
   };
 
   // const getimagefrompop = (categry)=>{
@@ -320,27 +407,31 @@ function App() {
 
   // }
   const getNewPins = (categry = "") => {
+    console.log("kjsandasnodnasdnjenf")
+    let user = JSON.parse(localStorage.getItem("user"))
     let promises = [];
     let pinData = [];
-
-    let pins = [...user.interested];
-    // pins.push(categry)
-    pins.forEach((pinTerm) => {
-      promises.push(
-        getImage(pinTerm).then((res) => {
-          let results = res.data.results;
-
-          pinData = pinData.concat(results);
-          pinData.sort(function (a, b) {
-            return 0.5 - Math.random();
+    let headers = {'Authorization':''}
+    if (user != null){
+      headers = {'Authorization':user.Authorization}
+    }
+    console.log(user)
+    axios({
+      method: 'GET',
+      url: (http_url+"pinterest_app/api/v1/home"),
+      headers: headers,
+      redirect: 'follow'
+    }).then((res) =>
+      {
+          let pins = res.data.pins
+          pins.forEach(element => {
+            element.url = http_url.slice(0,(http_url.length-1))+element.url
           });
-        })
-      );
-    });
-    Promise.all(promises).then(() => {
-      setNewPins(pinData);
-    });
-    console.log(pins)
+          console.log(pins)
+          setNewPins([...pins])
+
+      })
+      .catch((err) => console.log(err));
 
   }
   const boardviewHandler = (item) => {
@@ -349,7 +440,7 @@ function App() {
   }
 
   useEffect(() => {
-    getNewPins();
+     getNewPins();
   }, [])
 
 
@@ -377,24 +468,24 @@ function App() {
           </Route>
           <Route path="/boardview/:id" render={(props) =>
             <>
-              <Header />
+              <Header userLogout={userLogout}/>
               <BoardView board={newboard} {...props} />
             </>}>
           </Route>
           <Route path="/setting" >
-            <Header />
+            <Header userLogout={userLogout}/>
             <Setting />
           </Route>
           <Route path='/add'>
-            <Header onSumbit={onSearchSubmit} />
+            <Header onSumbit={onSearchSubmit} userLogout={userLogout} />
             <AddPin createPin={createPin} boards={newboard} userID={user.id} />
             {allpins.map(pin => (
               <Pin urls={pin.img} discUrl={pin.discUrl} deletePin={deletePin} key={pin.id} pinId={pin.id} onEdit={editPin} savePin={savePin} />
-            ))}
+            ))}userLogout={userLogout}
 
           </Route>
           <Route path='/home'>
-            <Header onSumbit={onSearchSubmit} />
+            <Header onSumbit={onSearchSubmit} userLogout={userLogout}/>
             <Mainboard pins={pins} onadd={boardviewHandler} />
             {/* <BoardView pins={newboard} /> */}
             <SignupPopup getimage={userInterest} gender={gender}/>
@@ -405,7 +496,7 @@ function App() {
 
           </Route> */}
           <Route path='/profile'>
-            <Profile userData={user} boards={newboard} />
+            <Profile userData={user} boards={newboard} createBoard={createBoard} />
           </Route>
             
           <Route path='/signin' render={props=><Splash user={user} signIn={userLogin} signUp={userSignup}{...props} />}/>

@@ -20,7 +20,7 @@ const Details = props =>{
         <div className="details">
             <div className="top_details">
                 <IconButton>
-                    <Link to="/"><KeyboardBackspaceSharpIcon /></Link>
+                    <Link to="/home"><KeyboardBackspaceSharpIcon /></Link>
                 </IconButton>
             </div>
             <div className="middle_details">

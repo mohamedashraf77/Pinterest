@@ -56,7 +56,7 @@ function Header(props) {
                    <Link to="/profile"> <FaceIcon /></Link>
                 </IconButton>
                 <IconButton>
-                    <DropMenu />
+                    <DropMenu userLogout={props.userLogout}/>
                     {/* <KeyboardArrowDownIcon /> */}
                 </IconButton>
             </IconWrapper>

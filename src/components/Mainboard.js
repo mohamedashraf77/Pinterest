@@ -22,8 +22,8 @@ function Mainboard({pins , onadd}) {
         <Wrapper>
             <Container className='mainboard__container'>
                 {pins.map((pin, index) => {
-                    let { urls } = pin;
-                    return <Pin key={index} urls={urls.regular} discUrl={urls.regular} savePin={addhandler}/>
+                    // let { urls } = pin;
+                    return <Pin key={index} urls={pin.url} discUrl={pin.url} savePin={addhandler}/>
                 })}
 
             </Container>

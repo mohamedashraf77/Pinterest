@@ -20,10 +20,9 @@ import { styled, alpha } from '@mui/material/styles';
 import Board from "./DropMenuBoard";
 import equal from 'fast-deep-equal';
 import {Link} from 'react-router-dom';
+import axios from "axios"
 
-
-
-
+const http_url = "http://localhost:8000/";
 
 function srcset(image: string, size: number, rows = 1, cols = 1) {
     return {
@@ -36,6 +35,7 @@ function srcset(image: string, size: number, rows = 1, cols = 1) {
 
 
 class Profile extends React.Component {
+    
     constructor(props) {
         super(props);
         let user = this.props.userData;
@@ -45,18 +45,70 @@ class Profile extends React.Component {
             profileimg: profile,
             followers: user.followers.length,   
             following: user.following.length,
-            boards:this.props.boards
+            boards:[]
         }
     }
-    componentDidUpdate(prevProps){
-        console.log(prevProps)
-        if(prevProps.boards !== this.props.boards){
-            this.setState({          
-                boards: this.props.boards
-            });
-        }
-    }
+    componentDidMount(){
+        // console.log(prevProps)
+        // if(prevProps.boards !== this.props.boards){
+        //     this.setState({          
+        //         boards: this.props.boards
+        //     });
+        
 
+            let user = JSON.parse(localStorage.getItem("user"))
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", user.Authorization);
+            var requestOptions = {
+              method: 'GET',
+              headers: myHeaders,
+              redirect: 'follow'
+            };
+        
+            fetch((http_url+"pinterest_app/api/v1/crud/board"), requestOptions)
+              .then(response => response.text())
+              .then(result => {
+                  let boards = JSON.parse(result)
+                  boards.forEach(eachboard => {
+                    eachboard.pin.forEach(element => {
+                        element.url = http_url.slice(0,(http_url.length-1))+element.url
+                      });
+                  });
+                  this.setState({...this.state, boards:boards })
+                  console.log(this.state)
+              })
+              .catch(error => console.log('error', error));
+        
+          }
+          componentDidUpdate(prevProps){
+            console.log(prevProps)
+            if(prevProps.boards !== this.props.boards){
+                this.componentDidMount()
+            
+            }
+    
+        }
+         
+        deleteBoard = (id) => {
+            console.log(id)
+            // setNewBoard(newboard.filter(pin => pin.id !== id))
+        
+            let user = JSON.parse(localStorage.getItem("user"))
+            axios({
+              method: 'DELETE',
+              url: http_url+"pinterest_app/api/v1/crud/delete/board/"+id,
+              headers:{'Authorization':user.Authorization},
+            }).then((res) =>
+              {
+                console.log(res.data)
+                this.componentDidMount()
+                
+            // this.setState(this.state.boards.filter(board => board.id !== id))
+              })
+              .catch((err) => console.log(err));
+
+        
+          }
 
 
 
@@ -109,6 +161,7 @@ class Profile extends React.Component {
             <Container>
 
                 <Grid container>
+                    {console.log(this.state.boards)}
                     {this.state.boards.map((cat, i) => (
                         <Grid item xs={3} >
 
@@ -116,7 +169,7 @@ class Profile extends React.Component {
                                 <Box sx={{ borderRadius: 5, padding: 1, }}>
 
                                     {/* <ImageList variant="masonry" cols={3} gap={8} sx={{ borderRadius: 4 }}>
-                                        {cat.images.filter((image, idx) => idx < 4).map(image => (
+                                        {cat.images.filter((image, idx) => idx < 5).map(image => (
 
                                             <ImageListItem  >
                                                 <img
@@ -127,21 +180,21 @@ class Profile extends React.Component {
 
                                         ))}
                                     </ImageList> */}
-                                    <ImageList
+                                     <ImageList
                                         sx={{ width: 1, height: 1 }}
                                         variant="quilted"
-                                        cols={3}
+                                        cols={2}
                                         rowHeight={121}
                                         sx={{ borderRadius: 4 }}
                                     >
-                                        {cat.pins.filter((image, idx) => idx < 4).map(image => (
+                                        {cat.pin.filter((image, idx) => idx < 4).map(image => (
                                             <ImageListItem
                                                 // key={cat.image.img}
-                                                cols={image.cols || 1}
-                                                rows={image.rows || 1}
+                                                // cols={1}
+                                                // rows={1}
                                             >
                                                 <img
-                                                    {...srcset(image.img, 121, image.cols, image.cols)}
+                                                    {...srcset(image.url, 121, 1, 1)}
                                                     alt={cat.title}
                                                     loading="lazy"
                                                 />
@@ -157,7 +210,7 @@ class Profile extends React.Component {
                                         {cat.title}
                                     </Typography>
                                     <Typography variant="subtitle2" sx={{ color: "black", marginLeft: 5, top: 0 }}>
-                                        {cat.pin} Pins {cat.time}
+                                         {cat.pin.length} Pins
                                     </Typography>
                                 </Grid>
                                 <Grid >
@@ -168,7 +221,7 @@ class Profile extends React.Component {
                                     <Container sx={{float:"right"}}>
                                         <IconButton>
                                             {/* <DeleteIcon sx={{ float: "right", cursor: "pointer", fontSize: 20 }} /> */}
-                                            <DeleteIcon onClick={()=>{this.props.deleteBoard(cat.id)}}/>
+                                            <DeleteIcon onClick={()=>this.deleteBoard(cat.id)}/>
                                         </IconButton>
                                     {/* </IconWrapper>   */}
                                     </Container>
