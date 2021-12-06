@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view,permission_classes,authentication_classes
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserSerializer2
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -49,11 +49,20 @@ def set_tags(request):
         print(request.data)
         user = request.user
         tags = request.data['tags']
+        tags_dics = {}
         tags_list = tags.split(',')
         for tag in tags_list:
-            print(tag)
-            t = pin_tags.objects.get(tag=tag)
-            user.tags.add(t)
+            try:
+                tags_dics[tag]+=1
+            except:
+                tags_dics[tag] = 0
+            if tags_dics[tag]==0:
+                print(tag)
+                try:
+                    t = pin_tags.objects.get(tag=tag)
+                    user.tags.add(t)
+                except:
+                    pass
         return Response(data={"message": "done"}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(data={"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -66,3 +75,31 @@ def login_check(request):
         return Response(data={"message": "done"}, status=status.HTTP_200_OK)
     else:
         return Response(data={"message": "none"}, status=status.HTTP_200_OK)
+
+@api_view(['PUT','PATCH'])
+@permission_classes([IsAuthenticated])
+def userUpdate(request):
+    try:
+        user = User.objects.get(id=request.user.id)
+    except Exception as e:
+        return Response(data={'message': str(e)}, status=status.HTTP_408_REQUEST_TIMEOUT)
+    if request.method == 'PUT':
+        serialized = UserSerializer2(instance=user, data=request.data)
+    elif request.method == 'PATCH':
+        serialized = UserSerializer2(instance=user, data=request.data, partial=True)
+
+    if serialized.is_valid():
+        serialized.save()
+        return Response(data=serialized.data, status=status.HTTP_200_OK)
+
+    return Response(data=serialized.errors, status=status.HTTP_408_REQUEST_TIMEOUT)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getuser(request):
+    try:
+        user = request.user
+        serializer = UserSerializer2(instance=user)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+    except:
+        return Response(data={"message": "data dosn't exist"}, status=status.HTTP_400_BAD_REQUEST)

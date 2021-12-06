@@ -7,10 +7,11 @@ class Board(models.Model):
     title = models.CharField(null= True, blank= True, max_length= 100 )
     privacy = models.BooleanField(default= False)
     user = models.ForeignKey('User', on_delete=models.CASCADE)
+    pin = models.ManyToManyField('pin')
 
 class User(AbstractUser):
     username = None
-    first_name = models.CharField(max_length=150, null= True, blank= True)
+    first_name = models.CharField(max_length=150, null= True, blank= True, default= 'image')
     last_name = models.CharField(max_length=150, null= True, blank= True)
     email = models.EmailField(max_length=150, unique=True)
     password = models.CharField(max_length=150)
@@ -35,15 +36,14 @@ class Pin(models.Model):
     description = models.TextField(null=True, blank=True)
     destination_link = models.URLField(null=True, blank=True)
     type = models.CharField(max_length=10, choices= [('image', 'image'), ('video', 'video')], default= 'image')
-    url = models.ImageField(upload_to= 'pinterest_app/Pin')
-    boards = models.ManyToManyField(Board, blank=True)
+    url = models.ImageField(upload_to= 'pinterest_app/Pin', max_length=300)
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     likes = models.IntegerField(blank=True, null=True)
 
 
-class Saved_pins(models.Model):
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
-    pin = models.ForeignKey('Pin', on_delete=models.CASCADE)
+# class Saved_pins(models.Model):
+#     user = models.ForeignKey('User', on_delete=models.CASCADE)
+#     pin = models.ForeignKey('Pin', on_delete=models.CASCADE)
 
 class Comment_pins(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE)

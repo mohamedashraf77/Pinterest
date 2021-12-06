@@ -11,4 +11,6 @@ urlpatterns = [
   path('gender', views.set_gender, name= 'gender'),
   path('tags', views.set_tags, name= 'tags'),
   path('home', views.login_check, name= 'login_check'),
+  path('update', views.userUpdate, name= 'update'),
+  path('get', views.getuser, name= 'get'),
 ]

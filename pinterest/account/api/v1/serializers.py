@@ -30,3 +30,8 @@ class UserSerializer(serializers.ModelSerializer):
     def set_gender(self):
         self.instance.gender = self.validated_data.get('gender')
         self.instance.save()
+
+class UserSerializer2(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields =('first_name','last_name','avatar')

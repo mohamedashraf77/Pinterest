@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Pin, pin_tags
+from .models import Pin, pin_tags, Board, User
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -17,7 +17,7 @@ def create_pin(sender, instance, created, **kwargs):
 
         img = cv2.imread(instance.url.path)
         img = np.uint8(img)
-        img = cv2.resize(img, (224, 224), interpolation=cv2.INTER_AREA)
+        img = cv2.resize(img, (299, 299), interpolation=cv2.INTER_AREA)
         img = img.astype('float16')
         img /= 255
 
@@ -59,3 +59,9 @@ def create_pin(sender, instance, created, **kwargs):
                     t = pin_tags.objects.get(tag=key)
 
                 t.pin.add(instance)
+
+@receiver(post_save, sender=User)
+def create_user(sender, instance, created, **kwargs):
+    if created:
+        print("create new board")
+        Board.objects.create(title= "All Pins", user= instance)
